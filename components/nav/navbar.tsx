@@ -14,10 +14,10 @@ const Navbar = () => {
   return (
     <>
       <nav className="flex items-center justify-between px-20 py-10">
-        <div className="flex items-center gap-2">
+        <Link href={"/"} className="flex items-center gap-2">
           <CommandIcon size={"24"} />
           <h1 className="font-bold text-2xl">Motion</h1>
-        </div>
+        </Link>
         <Link href={"/login"}>
           <Button>Login</Button>
         </Link>
