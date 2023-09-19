@@ -13,8 +13,8 @@ const Register = () => {
 
   if (status === "loading") return <Loading />;
 
-  if (!session) {
-    redirect("/login");
+  if (session) {
+    redirect("/dashboard");
   }
 
   return (
@@ -28,7 +28,6 @@ const Register = () => {
             Enter your email below to create your account
           </p>
           <Input placeholder="name@example.com" type="email" />
-          <Input placeholder="Username" type="text" />
           <Input placeholder="Password" type="password" />
           <Button className="w-full">Sign Up with Email</Button>
 

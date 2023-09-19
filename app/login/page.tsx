@@ -1,12 +1,22 @@
 "use client";
+import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CommandIcon } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
 const Login = () => {
+  const { data: session, status } = useSession();
+
+  if (status === "loading") return <Loading />;
+
+  if (session) {
+    redirect("/dashboard");
+  }
+
   return (
     <>
       <div className="flex flex-col items-center justify-center h-[70vh] text-center w-[30vw] mx-auto gap-3">
