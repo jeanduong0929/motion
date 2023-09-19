@@ -54,36 +54,38 @@ const Login = () => {
 
   return (
     <>
-      <form
-        className="flex flex-col items-center justify-center h-[70vh] text-center w-[30vw] mx-auto gap-3"
-        onSubmit={handleForm}
-      >
-        <CommandIcon size={30} />
-        <h1 className="text-2xl font-bold">Welcome back</h1>
-        <p className="text-sm text-slate-500">
-          Enter your email to sign in to your account
-        </p>
+      <div className="flex flex-col items-center justify-center w-[30vw] h-[70vh] mx-auto gap-3">
+        <form
+          className="flex flex-col items-center justify-center text-center gap-3 w-full"
+          onSubmit={handleForm}
+        >
+          <CommandIcon size={30} />
+          <h1 className="text-2xl font-bold">Welcome back</h1>
+          <p className="text-sm text-slate-500">
+            Enter your email to sign in to your account
+          </p>
 
-        <div className="flex flex-col items-start gap-1 w-full">
+          <div className="flex flex-col items-start gap-1 w-full">
+            <Input
+              placeholder="name@example.com"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+          </div>
+
           <Input
-            placeholder="name@example.com"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-        </div>
 
-        <Input
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <Button className="w-full" type="submit">
-          Sign In with Email
-        </Button>
+          <Button className="w-full" type="submit">
+            Sign In with Email
+          </Button>
+        </form>
 
         <div className="flex items-center gap-2 w-full">
           <hr className="w-full" />
@@ -119,7 +121,7 @@ const Login = () => {
             Don't have an account? Sign Up
           </p>
         </Link>
-      </form>
+      </div>
     </>
   );
 };

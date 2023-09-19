@@ -14,10 +14,20 @@ import { AuthContext } from "@/contexts/session-provider";
 
 const UserDropdown = () => {
   const { data: session } = useSession();
-  const { auth } = React.useContext(AuthContext);
+  const { auth, setAuth } = React.useContext(AuthContext);
 
   const getInitials = (email: string) => {
+    if (!email) {
+      return;
+    }
+
     return (email[0] + email[1]).toUpperCase();
+  };
+
+  const handleSignOut = () => {
+    signOut();
+    setAuth(null);
+    sessionStorage.removeItem("auth");
   };
 
   return (
@@ -27,13 +37,13 @@ const UserDropdown = () => {
           <Avatar>
             <AvatarImage src={session?.user?.image as string} />
             <AvatarFallback>
-              {getInitials(auth?.email as string)}
+              {getInitials(auth ? auth.email : "")}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>
-            {session?.user?.email ? session?.user?.email : auth?.email}
+            {session ? session?.user?.email : auth?.email}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <Link href={"/dashboard"}>
@@ -46,9 +56,7 @@ const UserDropdown = () => {
             <DropdownMenuItem>Settings</DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>
-            Sign out
-          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
