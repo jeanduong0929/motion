@@ -2,14 +2,45 @@
 import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import instance from "@/lib/axios-config";
 import { CommandIcon } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const Login = () => {
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [error, setError] = React.useState<string>("");
   const { data: session, status } = useSession();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const { data } = await instance.post("/auth/login", {
+        email,
+        password,
+      });
+
+      sessionStorage.setItem("auth", JSON.stringify(data));
+
+      toast({
+        description: "Logged in successfully",
+        className: "bg-slate-800 text-white",
+      });
+      router.push("/dashboard");
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        setError("Email or password is incorrect");
+      }
+    }
+  };
 
   if (status === "loading") return <Loading />;
 
@@ -19,14 +50,36 @@ const Login = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-[70vh] text-center w-[30vw] mx-auto gap-3">
+      <form
+        className="flex flex-col items-center justify-center h-[70vh] text-center w-[30vw] mx-auto gap-3"
+        onSubmit={handleForm}
+      >
         <CommandIcon size={30} />
         <h1 className="text-2xl font-bold">Welcome back</h1>
         <p className="text-sm text-slate-500">
           Enter your email to sign in to your account
         </p>
-        <Input placeholder="name@example.com" type="email" />
-        <Button className="w-full">Sign In with Email</Button>
+
+        <div className="flex flex-col items-start gap-1 w-full">
+          <Input
+            placeholder="name@example.com"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+        </div>
+
+        <Input
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <Button className="w-full" type="submit">
+          Sign In with Email
+        </Button>
 
         <div className="flex items-center gap-2 w-full">
           <hr className="w-full" />
@@ -62,7 +115,7 @@ const Login = () => {
             Don't have an account? Sign Up
           </p>
         </Link>
-      </div>
+      </form>
     </>
   );
 };
