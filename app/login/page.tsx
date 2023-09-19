@@ -1,6 +1,8 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CommandIcon } from "lucide-react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
@@ -22,7 +24,12 @@ const Login = () => {
           <hr className="w-full" />
         </div>
 
-        <Button className="w-full">
+        <Button
+          className="w-full"
+          onClick={() =>
+            signIn("github", { callbackUrl: "http://localhost:3000/dashboard" })
+          }
+        >
           <svg
             aria-hidden="true"
             focusable="false"
