@@ -1,10 +1,22 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CommandIcon } from "lucide-react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import { redirect } from "next/navigation";
+import Loading from "@/components/loading";
 
 const Register = () => {
+  const { data: session, status } = useSession();
+
+  if (status === "loading") return <Loading />;
+
+  if (!session) {
+    redirect("/login");
+  }
+
   return (
     <>
       <div className="flex items-center w-full h-full">
@@ -26,7 +38,14 @@ const Register = () => {
             <hr className="w-full" />
           </div>
 
-          <Button className="w-full">
+          <Button
+            className="w-full"
+            onClick={() =>
+              signIn("github", {
+                callbackUrl: "http://localhost:3000/dashboard",
+              })
+            }
+          >
             <svg
               aria-hidden="true"
               focusable="false"
