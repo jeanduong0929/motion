@@ -6,9 +6,12 @@ import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import NavLogin from "./nav-login";
 import NavRegister from "./nav-register";
+import { useSession } from "next-auth/react";
+import UserDropdown from "./userdropdown";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   if (pathname === "/login") return <NavLogin />;
 
@@ -21,9 +24,13 @@ const Navbar = () => {
           <CommandIcon size={"24"} />
           <h1 className="font-bold text-2xl">Motion</h1>
         </Link>
-        <Link href={"/login"}>
-          <Button>Login</Button>
-        </Link>
+        {session ? (
+          <UserDropdown />
+        ) : (
+          <Link href={"/login"}>
+            <Button>Login</Button>
+          </Link>
+        )}
       </nav>
     </>
   );
