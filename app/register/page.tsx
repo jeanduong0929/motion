@@ -11,9 +11,9 @@ const Register = () => {
         <div className="w-1/2 bg-slate-900 h-screen" />
         <div className="flex flex-col items-center text-center w-[30vw] mx-auto gap-3">
           <CommandIcon size={30} />
-          <h1 className="text-2xl font-bold">Welcome back</h1>
+          <h1 className="text-2xl font-bold">Create an account</h1>
           <p className="text-sm text-slate-500">
-            Enter your email to sign in to your account
+            Enter your email below to create your account
           </p>
           <Input placeholder="name@example.com" type="email" />
           <Input placeholder="Username" type="text" />
