@@ -9,16 +9,18 @@ import NavRegister from "./nav-register";
 import { useSession } from "next-auth/react";
 import UserDropdown from "./userdropdown";
 import Loading from "../loading";
+import { AuthContext } from "@/contexts/session-provider";
 
 const Navbar = () => {
   const pathname = usePathname();
   const { data: session, status } = useSession();
+  const { auth, loading } = React.useContext(AuthContext);
 
   if (pathname === "/login") return <NavLogin />;
 
   if (pathname === "/register") return <NavRegister />;
 
-  if (status === "loading") return <Loading />;
+  if (status === "loading" || loading) return <Loading />;
 
   return (
     <>
@@ -27,7 +29,7 @@ const Navbar = () => {
           <CommandIcon size={"24"} />
           <h1 className="font-bold text-2xl">Motion</h1>
         </Link>
-        {session ? (
+        {session || auth ? (
           <UserDropdown />
         ) : (
           <Link href={"/login"}>

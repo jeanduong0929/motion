@@ -3,6 +3,7 @@ import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { AuthContext } from "@/contexts/session-provider";
 import instance from "@/lib/axios-config";
 import { CommandIcon } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
@@ -18,6 +19,7 @@ const Login = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { toast } = useToast();
+  const { setAuth } = React.useContext(AuthContext);
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,12 +30,14 @@ const Login = () => {
         password,
       });
 
+      setAuth(data);
       sessionStorage.setItem("auth", JSON.stringify(data));
 
       toast({
         description: "Logged in successfully",
         className: "bg-slate-800 text-white",
       });
+
       router.push("/dashboard");
     } catch (error: any) {
       if (error.response.status === 401) {
