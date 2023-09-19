@@ -9,7 +9,47 @@ import { redirect } from "next/navigation";
 import Loading from "@/components/loading";
 
 const Register = () => {
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+
+  const [emailError, setEmailError] = React.useState<string>("");
+  const [passwordError, setPasswordError] = React.useState<string>("");
+
   const { data: session, status } = useSession();
+
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+
+    if (!e.target.value.trim()) {
+      setEmailError("Email is required");
+    } else if (!isValidEmail(e.target.value)) {
+      setEmailError("Email is invalid");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+
+    if (!e.target.value.trim()) {
+      setPasswordError("Password is required");
+    } else if (!isValidPassword(password)) {
+      setPasswordError("Password must be at least 6 characters");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const isValidEmail = (email: string) => {
+    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+  };
+
+  const isValidPassword = (password: string) => {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+      password,
+    );
+  };
 
   if (status === "loading") return <Loading />;
 
@@ -27,8 +67,31 @@ const Register = () => {
           <p className="text-sm text-slate-500">
             Enter your email below to create your account
           </p>
-          <Input placeholder="name@example.com" type="email" />
-          <Input placeholder="Password" type="password" />
+
+          <div className="flex flex-col items-start gap-1 w-full">
+            <Input
+              placeholder="name@example.com"
+              type="email"
+              value={email}
+              onBlur={handleEmail}
+              onChange={handleEmail}
+            />
+            {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
+          </div>
+
+          <div className="flex flex-col items-start gap-1 w-full">
+            <Input
+              placeholder="Password"
+              type="password"
+              value={password}
+              onBlur={handlePassword}
+              onChange={handlePassword}
+            />
+            {passwordError && (
+              <p className="text-red-500 text-sm">{passwordError}</p>
+            )}
+          </div>
+
           <Button className="w-full">Sign Up with Email</Button>
 
           <div className="flex items-center gap-2 w-full">
