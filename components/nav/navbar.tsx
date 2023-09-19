@@ -5,11 +5,14 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import NavLogin from "./nav-login";
+import NavRegister from "./nav-register";
 
 const Navbar = () => {
   const pathname = usePathname();
 
   if (pathname === "/login") return <NavLogin />;
+
+  if (pathname === "/register") return <NavRegister />;
 
   return (
     <>
