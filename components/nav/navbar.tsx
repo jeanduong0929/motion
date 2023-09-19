@@ -8,14 +8,17 @@ import NavLogin from "./nav-login";
 import NavRegister from "./nav-register";
 import { useSession } from "next-auth/react";
 import UserDropdown from "./userdropdown";
+import Loading from "../loading";
 
 const Navbar = () => {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   if (pathname === "/login") return <NavLogin />;
 
   if (pathname === "/register") return <NavRegister />;
+
+  if (status === "loading") return <Loading />;
 
   return (
     <>
