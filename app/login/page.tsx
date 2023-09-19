@@ -2,14 +2,12 @@
 import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/contexts/session-provider";
 import instance from "@/lib/axios-config";
 import { CommandIcon } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React from "react";
 
 const Login = () => {
@@ -18,8 +16,7 @@ const Login = () => {
   const [error, setError] = React.useState<string>("");
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { toast } = useToast();
-  const { setAuth } = React.useContext(AuthContext);
+  const { auth, setAuth, loading } = React.useContext(AuthContext);
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,11 +30,6 @@ const Login = () => {
       setAuth(data);
       sessionStorage.setItem("auth", JSON.stringify(data));
 
-      toast({
-        description: "Logged in successfully",
-        className: "bg-slate-800 text-white",
-      });
-
       router.push("/dashboard");
     } catch (error: any) {
       if (error.response.status === 401) {
@@ -46,9 +38,9 @@ const Login = () => {
     }
   };
 
-  if (status === "loading") return <Loading />;
+  if (status === "loading" || loading) return <Loading />;
 
-  if (session) {
+  if (session || auth) {
     redirect("/dashboard");
   }
 

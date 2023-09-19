@@ -10,6 +10,7 @@ import Loading from "@/components/loading";
 import instance from "@/lib/axios-config";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import { AuthContext } from "@/contexts/session-provider";
 
 const Register = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ const Register = () => {
   const [emailError, setEmailError] = React.useState<string>("");
   const [passwordError, setPasswordError] = React.useState<string>("");
   const { data: session, status } = useSession();
+  const { auth, loading } = React.useContext(AuthContext);
   const { toast } = useToast();
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,9 +76,9 @@ const Register = () => {
     );
   };
 
-  if (status === "loading") return <Loading />;
+  if (status === "loading" || loading) return <Loading />;
 
-  if (session) {
+  if (session || auth) {
     redirect("/dashboard");
   }
 
