@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Navbar from "@/components/nav/navbar";
 import Session from "@/contexts/session-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-grow">{children}</main>
             <Footer />
+            <Toaster />
           </div>
         </Session>
       </body>

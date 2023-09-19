@@ -7,15 +7,18 @@ import Link from "next/link";
 import React from "react";
 import { redirect } from "next/navigation";
 import Loading from "@/components/loading";
+import instance from "@/lib/axios-config";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 const Register = () => {
+  const router = useRouter();
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
-
   const [emailError, setEmailError] = React.useState<string>("");
   const [passwordError, setPasswordError] = React.useState<string>("");
-
   const { data: session, status } = useSession();
+  const { toast } = useToast();
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -35,9 +38,29 @@ const Register = () => {
     if (!e.target.value.trim()) {
       setPasswordError("Password is required");
     } else if (!isValidPassword(password)) {
-      setPasswordError("Password must be at least 6 characters");
+      setPasswordError("Password is invalid");
     } else {
       setPasswordError("");
+    }
+  };
+
+  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await instance.post("/auth/register", {
+        email,
+        password,
+      });
+      toast({
+        description: "We've created your account for you.",
+        className: "bg-slate-800 text-white",
+      });
+      router.push("/login");
+    } catch (error: any) {
+      if (error.response.status === 409) {
+        setEmailError("Email is already taken");
+      }
     }
   };
 
@@ -60,8 +83,11 @@ const Register = () => {
   return (
     <>
       <div className="flex items-center w-full h-full">
-        <div className="w-1/2 bg-slate-900 h-screen" />
-        <div className="flex flex-col items-center text-center w-[30vw] mx-auto gap-3">
+        <div className="w-1/2 bg-slate-800 h-screen" />
+        <form
+          className="flex flex-col items-center text-center w-[30vw] mx-auto gap-3"
+          onSubmit={handleForm}
+        >
           <CommandIcon size={30} />
           <h1 className="text-2xl font-bold">Create an account</h1>
           <p className="text-sm text-slate-500">
@@ -92,7 +118,9 @@ const Register = () => {
             )}
           </div>
 
-          <Button className="w-full">Sign Up with Email</Button>
+          <Button className="w-full" type="submit">
+            Sign Up with Email
+          </Button>
 
           <div className="flex items-center gap-2 w-full">
             <hr className="w-full" />
@@ -138,7 +166,7 @@ const Register = () => {
               .
             </p>
           </Link>
-        </div>
+        </form>
       </div>
     </>
   );
