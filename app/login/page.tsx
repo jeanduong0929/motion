@@ -7,7 +7,7 @@ import instance from "@/lib/axios-config";
 import { CommandIcon, Loader2 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import React from "react";
 
 const Login = () => {
@@ -18,7 +18,6 @@ const Login = () => {
   const [githubLoading, setGithubLoading] = React.useState<boolean>(false);
   const { data: session, status } = useSession();
   const { auth, setAuth, loading } = React.useContext(AuthContext);
-  const router = useRouter();
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,9 +32,9 @@ const Login = () => {
       setAuth(data);
       sessionStorage.setItem("auth", JSON.stringify(data));
 
-      router.push("/dashboard");
+      redirect("/dashboard");
     } catch (error: any) {
-      if (error.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         setError("Email or password is incorrect");
       }
     } finally {

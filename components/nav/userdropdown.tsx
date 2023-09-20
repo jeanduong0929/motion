@@ -25,7 +25,7 @@ const UserDropdown = () => {
   };
 
   const handleSignOut = () => {
-    signOut();
+    session && signOut();
     setAuth(null);
     sessionStorage.removeItem("auth");
   };

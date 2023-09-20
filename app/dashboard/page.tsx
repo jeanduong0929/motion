@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { AuthContext } from "@/contexts/session-provider";
 import Sidebar from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, TrashIcon } from "lucide-react";
+import { CheckIcon, EditIcon, PlusIcon, TrashIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -28,37 +28,59 @@ import Link from "next/link";
 import Todo from "@/models/todo";
 
 const Dashboard = () => {
+  const [todos, setTodos] = React.useState<Todo[]>([]);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
+  const [pageLoading, setPageLoading] = React.useState<boolean>(false);
+  const [doneLoading, setDoneLoading] = React.useState<boolean>(false);
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
-  const [todos, setTodos] = React.useState<Todo[]>([]);
-  const mySession = session as MySession;
-  const [pageLoading, setPageLoading] = React.useState<boolean>(true);
+  const mySession = session ? (session as MySession) : null;
 
   useEffect(() => {
-    getTodos();
-  }, []);
+    if (!session && !auth) {
+      redirect("/login");
+    }
+
+    if (session || auth) {
+      getTodos();
+    }
+  }, [status, loading, session, auth]);
 
   const getTodos = async () => {
-    if (session || auth) {
-      try {
-        const { data } = await instance.get(
-          `/todo/${mySession ? mySession!.id : auth!.id}`,
-        );
-        setTodos(data);
-      } catch (error: any) {
-        console.log(error);
-      } finally {
-        setPageLoading(false);
-      }
+    setPageLoading(true);
+    try {
+      const { data } = await instance.get(
+        `/todo/${mySession ? mySession!.id : auth ? auth!.id : ""}`,
+      );
+      setTodos(data);
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      setPageLoading(false);
+    }
+  };
+
+  const handleDone = async (id: string, completed: boolean) => {
+    setDoneLoading(true);
+    try {
+      await instance.put(`/todo/done`, {
+        id,
+        completed,
+      });
+
+      setTodos((prevTodos) =>
+        prevTodos.map((todo) =>
+          todo._id === id ? { ...todo, completed: completed } : todo,
+        ),
+      );
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      setDoneLoading(false);
     }
   };
 
   if (status == "loading" || loading || pageLoading) return <Loading />;
-
-  if (!session && !auth) {
-    redirect("/login");
-  }
 
   return (
     <>
@@ -84,10 +106,18 @@ const Dashboard = () => {
             {todos &&
               todos.map((todo: Todo) => (
                 <div
-                  key={todo.id}
+                  key={todo._id}
                   className="flex items-center justify-between border px-5 py-4"
                 >
-                  <h1 className="font-bold">{todo.title}</h1>
+                  <h1
+                    style={{
+                      textDecorationLine: todo.completed ? "line-through" : "",
+                      textDecorationThickness: todo.completed ? "1.5px" : "",
+                    }}
+                    className={"font-bold"}
+                  >
+                    {todo.title}
+                  </h1>
 
                   <DropdownMenu>
                     <DropdownMenuTrigger>
@@ -109,7 +139,19 @@ const Dashboard = () => {
                       </svg>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => handleDone(todo._id, !todo.completed)}
+                      >
+                        Done
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <Link
+                        href={`/dashboard/${
+                          mySession ? mySession!.id : auth ? auth!.id : ""
+                        }`}
+                      >
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                      </Link>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         className="text-red-500"

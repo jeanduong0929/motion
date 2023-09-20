@@ -63,8 +63,10 @@ const Register = () => {
       });
       router.push("/login");
     } catch (error: any) {
-      if (error.response.status === 409) {
-        setEmailError("Email is already taken");
+      if (error) {
+        if (error.response.status === 409) {
+          setEmailError("Email is already taken");
+        }
       }
     } finally {
       setSignUpLoading(false);

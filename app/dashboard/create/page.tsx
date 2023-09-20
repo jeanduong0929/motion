@@ -32,6 +32,7 @@ const TodoCreate = () => {
         description: "You cannot create an empty todo",
         className: "bg-slate-800 text-white",
       });
+      setTitle("");
     } catch (error: any) {
       if (error.response.status === 400) {
         toast({
