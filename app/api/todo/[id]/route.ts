@@ -1,5 +1,4 @@
 import TodoEntity from "@/entities/todo-entity";
-import UserEntity from "@/entities/user-entity";
 import connectDB from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,12 +6,17 @@ export const GET = async (
   req: NextRequest,
   context: { params: { id: string } },
 ) => {
-  await connectDB();
+  const { id } = context.params;
+  let todo;
 
-  const existingUser = await UserEntity.findOne({ _id: context.params.id });
-  const todos = await TodoEntity.find({ user: existingUser });
-
-  return NextResponse.json(todos, { status: 200 });
+  try {
+    await connectDB();
+    todo = await TodoEntity.findOne({ _id: id });
+  } catch (error: any) {
+    console.log("Error connecting to DB: ", error.message);
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
+  return NextResponse.json(todo, { status: 200 });
 };
 
 export const DELETE = async (

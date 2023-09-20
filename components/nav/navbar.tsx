@@ -3,25 +3,14 @@ import { CommandIcon } from "lucide-react";
 import React from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { usePathname } from "next/navigation";
-import NavLogin from "./nav-login";
-import NavRegister from "./nav-register";
 import { useSession } from "next-auth/react";
 import UserDropdown from "./userdropdown";
 import Loading from "../loading";
 import { AuthContext } from "@/contexts/session-provider";
-import NavTodoCreate from "./nav-todo-create";
 
 const Navbar = () => {
-  const pathname = usePathname();
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
-
-  if (pathname === "/login") return <NavLogin />;
-
-  if (pathname === "/register") return <NavRegister />;
-
-  if (pathname === "/dashboard/create") return <NavTodoCreate />;
 
   if (status === "loading" || loading) return <Loading />;
 

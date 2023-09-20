@@ -26,6 +26,7 @@ import instance from "@/lib/axios-config";
 import MySession from "@/models/session";
 import Link from "next/link";
 import Todo from "@/models/todo";
+import Navbar from "@/components/nav/navbar";
 
 const Dashboard = () => {
   const [deleteTodoId, setDeleteTodoId] = React.useState<string>("");
@@ -51,7 +52,7 @@ const Dashboard = () => {
     setPageLoading(true);
     try {
       const { data } = await instance.get(
-        `/todo/${mySession ? mySession!.id : auth ? auth!.id : ""}`,
+        `/todo/user/${mySession ? mySession!.id : auth ? auth!.id : ""}`,
       );
       setTodos(data);
     } catch (error: any) {
@@ -95,6 +96,7 @@ const Dashboard = () => {
 
   return (
     <>
+      <Navbar />
       <div className="flex w-full border-t py-10">
         <Sidebar />
         <div className="flex flex-col items-start gap-5 w-full px-20">
@@ -162,11 +164,7 @@ const Dashboard = () => {
                         Done
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <Link
-                        href={`/dashboard/${
-                          mySession ? mySession!.id : auth ? auth!.id : ""
-                        }`}
-                      >
+                      <Link href={`/dashboard/edit/${todo._id}`}>
                         <DropdownMenuItem>Edit</DropdownMenuItem>
                       </Link>
                       <DropdownMenuSeparator />

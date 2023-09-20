@@ -11,6 +11,7 @@ import instance from "@/lib/axios-config";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/contexts/session-provider";
+import NavRegister from "@/components/nav/nav-register";
 
 const Register = () => {
   const router = useRouter();
@@ -91,6 +92,7 @@ const Register = () => {
 
   return (
     <>
+      <NavRegister />
       <div className="flex items-center w-full h-full">
         <div className="w-1/2 bg-slate-800 h-screen" />
         <form

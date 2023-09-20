@@ -1,5 +1,6 @@
 "use client";
 import Loading from "@/components/loading";
+import NavLogin from "@/components/nav/nav-login";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthContext } from "@/contexts/session-provider";
@@ -50,6 +51,7 @@ const Login = () => {
 
   return (
     <>
+      <NavLogin />
       <div className="flex flex-col items-center justify-center w-[30vw] h-[70vh] mx-auto gap-3">
         <form
           className="flex flex-col items-center justify-center text-center gap-3 w-full"

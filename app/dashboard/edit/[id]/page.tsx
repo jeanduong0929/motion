@@ -1,30 +1,42 @@
 "use client";
 import Loading from "@/components/loading";
+import NavTodoCreate from "@/components/nav/nav-todo-create";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/contexts/session-provider";
 import instance from "@/lib/axios-config";
+import MySession from "@/models/session";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import React from "react";
 import { redirect } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
-import MySession from "@/models/session";
-import NavTodoCreate from "@/components/nav/nav-todo-create";
+import React from "react";
 
-const TodoCreate = () => {
-  const [title, setTitle] = React.useState<string>("");
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+const EditTodo = ({ params }: { params: { id: string } }) => {
+  const [title, setTitle] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [todoEditLoading, setTodoEditLoading] = React.useState(false);
+  const { id } = params;
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
   const { toast } = useToast();
-  const mySession = session as MySession;
+  const mySession = session ? (session as MySession) : null;
+
+  React.useEffect(() => {
+    if (!session && !auth) {
+      redirect("/login");
+    }
+
+    if (session || auth) {
+      getTodoById();
+    }
+  }, [status, session, auth]);
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      await instance.post("/todo", {
+      await instance.put("/todo", {
         title,
         userId: mySession ? mySession!.id : auth!.id,
       });
@@ -47,11 +59,19 @@ const TodoCreate = () => {
     }
   };
 
-  if (status === "loading" || loading) return <Loading />;
+  const getTodoById = async () => {
+    setTodoEditLoading(true);
+    try {
+      const { data } = await instance.get(`/todo/${id}`);
+      setTitle(data.title);
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      setTodoEditLoading(false);
+    }
+  };
 
-  if (!session && !auth) {
-    redirect("/login");
-  }
+  if (status == "loading" || loading || todoEditLoading) return <Loading />;
 
   return (
     <>
@@ -79,4 +99,4 @@ const TodoCreate = () => {
   );
 };
 
-export default TodoCreate;
+export default EditTodo;

@@ -2,7 +2,6 @@ import Footer from "@/components/footer";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Navbar from "@/components/nav/navbar";
 import Session from "@/contexts/session-provider";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -23,7 +22,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <Session>
           <div className="flex flex-col min-h-screen">
-            <Navbar />
             <main className="flex-grow">{children}</main>
             <Footer />
             <Toaster />
