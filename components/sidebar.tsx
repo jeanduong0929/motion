@@ -1,3 +1,4 @@
+"use client";
 import { ListTodo, SettingsIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
