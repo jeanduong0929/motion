@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { redirect } from "next/navigation";
 import { AuthContext } from "@/contexts/session-provider";
+import Sidebar from "@/components/sidebar";
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
@@ -15,7 +16,14 @@ const Dashboard = () => {
     redirect("/login");
   }
 
-  return <div>Dashboard</div>;
+  return (
+    <>
+      <div className="flex">
+        <Sidebar />
+        <div>Dashboard</div>
+      </div>
+    </>
+  );
 };
 
 export default Dashboard;
