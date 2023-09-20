@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const Sidebar = () => {
+const Sidebar = ({ ...props }) => {
   const pathname = usePathname();
 
   const options = [
@@ -33,7 +33,10 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="flex flex-col items-start pl-20 w-[350px] gap-2">
+      <div
+        className={`flex flex-col items-start pl-20 w-[350px] gap-2`}
+        {...props}
+      >
         {options.map((option) => (
           <Link
             key={option.id}

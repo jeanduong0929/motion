@@ -24,27 +24,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import instance from "@/lib/axios-config";
 import MySession from "@/models/session";
+import Link from "next/link";
+import Todo from "@/models/todo";
 
 const Dashboard = () => {
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
+  const [todos, setTodos] = React.useState<Todo[]>([]);
   const mySession = session as MySession;
-
-  const todos = [
-    {
-      id: "1",
-      title: "Todo 1",
-    },
-    {
-      id: "2",
-      title: "Todo 2",
-    },
-    {
-      id: "3",
-      title: "Todo 3",
-    },
-  ];
+  const [pageLoading, setPageLoading] = React.useState<boolean>(true);
 
   useEffect(() => {
     getTodos();
@@ -52,11 +41,20 @@ const Dashboard = () => {
 
   const getTodos = async () => {
     if (session || auth) {
-      await instance.get(`/todo/${mySession ? mySession!.id : auth!.id}`);
+      try {
+        const { data } = await instance.get(
+          `/todo/${mySession ? mySession!.id : auth!.id}`,
+        );
+        setTodos(data);
+      } catch (error: any) {
+        console.log(error);
+      } finally {
+        setPageLoading(false);
+      }
     }
   };
 
-  if (status == "loading" || loading) return <Loading />;
+  if (status == "loading" || loading || pageLoading) return <Loading />;
 
   if (!session && !auth) {
     redirect("/login");
@@ -74,52 +72,55 @@ const Dashboard = () => {
                 Create and manage your todos
               </h3>
             </div>
-            <Button>
-              <PlusIcon className="h-4 w-4 mr-2" />
-              New todo
-            </Button>
+            <Link href={"/dashboard/create"}>
+              <Button>
+                <PlusIcon className="h-4 w-4 mr-2" />
+                New todo
+              </Button>
+            </Link>
           </div>
 
           <div className="w-full">
-            {todos.map((todo) => (
-              <div
-                key={todo.id}
-                className="flex items-center justify-between border px-5 py-4"
-              >
-                <h1 className="font-bold">{todo.title}</h1>
+            {todos &&
+              todos.map((todo: Todo) => (
+                <div
+                  key={todo.id}
+                  className="flex items-center justify-between border px-5 py-4"
+                >
+                  <h1 className="font-bold">{todo.title}</h1>
 
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4 cursor-pointer"
-                    >
-                      <circle cx="12" cy="12" r="1"></circle>
-                      <circle cx="12" cy="5" r="1"></circle>
-                      <circle cx="12" cy="19" r="1"></circle>
-                    </svg>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-red-500"
-                      onClick={() => setOpenDialog(true)}
-                    >
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            ))}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-4 w-4 cursor-pointer"
+                      >
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                      </svg>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="text-red-500"
+                        onClick={() => setOpenDialog(true)}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              ))}
           </div>
         </div>
       </div>

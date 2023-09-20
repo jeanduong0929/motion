@@ -9,7 +9,7 @@ export const GET = async (
 ) => {
   await connectDB();
 
-  const existingUser = await UserEntity.findOne({ id: context.params.id });
+  const existingUser = await UserEntity.findOne({ _id: context.params.id });
   const todos = await TodoEntity.find({ user: existingUser });
 
   return NextResponse.json(todos, { status: 200 });

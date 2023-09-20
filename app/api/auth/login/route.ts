@@ -13,7 +13,10 @@ export const POST = async (req: NextRequest) => {
 
   if (
     !existingUser ||
-    !(await bcrypt.compare(password, existingUser.password))
+    !(
+      (await bcrypt.compare(password, existingUser.password)) ||
+      !password.trim()
+    )
   ) {
     return NextResponse.json({}, { status: 401 });
   }
