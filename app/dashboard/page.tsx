@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { AuthContext } from "@/contexts/session-provider";
 import Sidebar from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
-import { CheckIcon, EditIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { Loader2, PlusIcon, TrashIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -28,10 +28,11 @@ import Link from "next/link";
 import Todo from "@/models/todo";
 
 const Dashboard = () => {
+  const [deleteTodoId, setDeleteTodoId] = React.useState<string>("");
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [pageLoading, setPageLoading] = React.useState<boolean>(false);
-  const [doneLoading, setDoneLoading] = React.useState<boolean>(false);
+  const [loadingTodoId, setLoadingTodoId] = React.useState<string>("");
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
   const mySession = session ? (session as MySession) : null;
@@ -61,7 +62,7 @@ const Dashboard = () => {
   };
 
   const handleDone = async (id: string, completed: boolean) => {
-    setDoneLoading(true);
+    setLoadingTodoId(id);
     try {
       await instance.put(`/todo/done`, {
         id,
@@ -76,7 +77,17 @@ const Dashboard = () => {
     } catch (error: any) {
       console.log(error);
     } finally {
-      setDoneLoading(false);
+      setLoadingTodoId("");
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await instance.delete(`/todo/${id}`);
+      setOpenDialog(false);
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
+    } catch (error: any) {
+      console.log(error);
     }
   };
 
@@ -109,15 +120,21 @@ const Dashboard = () => {
                   key={todo._id}
                   className="flex items-center justify-between border px-5 py-4"
                 >
-                  <h1
-                    style={{
-                      textDecorationLine: todo.completed ? "line-through" : "",
-                      textDecorationThickness: todo.completed ? "1.5px" : "",
-                    }}
-                    className={"font-bold"}
-                  >
-                    {todo.title}
-                  </h1>
+                  {loadingTodoId === todo._id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <h1
+                      style={{
+                        textDecorationLine: todo.completed
+                          ? "line-through"
+                          : "",
+                        textDecorationThickness: todo.completed ? "1.5px" : "",
+                      }}
+                      className={"font-bold"}
+                    >
+                      {todo.title}
+                    </h1>
+                  )}
 
                   <DropdownMenu>
                     <DropdownMenuTrigger>
@@ -155,7 +172,9 @@ const Dashboard = () => {
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         className="text-red-500"
-                        onClick={() => setOpenDialog(true)}
+                        onClick={() => (
+                          setOpenDialog(true), setDeleteTodoId(todo._id)
+                        )}
                       >
                         Delete
                       </DropdownMenuItem>
@@ -166,7 +185,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
       <Dialog open={openDialog} onOpenChange={() => setOpenDialog(false)}>
         <DialogContent>
           <DialogHeader>
@@ -182,7 +200,10 @@ const Dashboard = () => {
             >
               Cancel
             </Button>
-            <Button className="bg-red-500 text-black hover:bg-red-800">
+            <Button
+              className="bg-red-500 text-black hover:bg-red-800"
+              onClick={() => handleDelete(deleteTodoId)}
+            >
               <TrashIcon className="h-4 w-4 mr-2" />
               Delete Delete
             </Button>

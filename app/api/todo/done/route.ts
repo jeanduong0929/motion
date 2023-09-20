@@ -17,5 +17,5 @@ export const PUT = async (req: NextRequest) => {
     return NextResponse.json({ error: error }, { status: 500 });
   }
 
-  return NextResponse.json({}, {});
+  return NextResponse.json({}, { status: 200 });
 };
