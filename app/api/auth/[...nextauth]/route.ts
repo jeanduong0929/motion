@@ -4,6 +4,7 @@ import connectDB from "@/lib/db";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import jwt from "jsonwebtoken";
+import Auth from "@/models/auth";
 
 const handler = NextAuth({
   providers: [
@@ -48,10 +49,14 @@ const handler = NextAuth({
     },
     async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
+        const existingUser = await UserEntity.findOne({
+          email: user!.email,
+        });
+
         const jwtToken = jwt.sign(
           {
-            id: user.id,
-            email: user.email,
+            id: existingUser!._id,
+            email: existingUser!.email,
           },
           process.env.JWT_SECRET as string,
           {
@@ -66,7 +71,10 @@ const handler = NextAuth({
     },
     async session({ session, token }: { session: any; token: any }) {
       if (session) {
+        const { id }: any = jwt.decode(token.jwt);
+
         session.jwt = token.jwt;
+        session.id = id;
       }
 
       return session;

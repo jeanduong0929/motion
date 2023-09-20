@@ -1,5 +1,6 @@
 import { Session } from "next-auth";
 
-interface MySession extends Session {
+export default interface MySession extends Session {
+  id: string;
   jwt: string;
 }
