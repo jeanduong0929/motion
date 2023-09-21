@@ -30,7 +30,7 @@ const TodoCreate = () => {
       });
 
       toast({
-        description: "You cannot create an empty todo",
+        description: "Todo created successfully",
         className: "bg-slate-800 text-white",
       });
       setTitle("");
