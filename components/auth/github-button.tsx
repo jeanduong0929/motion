@@ -17,7 +17,7 @@ const GithubButton = ({ loading, setLoading }: GithubButtonProps) => {
         onClick={() => {
           setLoading(true);
           signIn("github", {
-            callbackUrl: "http://localhost:3000/dashboard",
+            callbackUrl: "https://motion-two-topaz.vercel.app/dashboard",
           });
         }}
       >
