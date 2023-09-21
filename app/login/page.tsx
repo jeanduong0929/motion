@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { AuthContext } from "@/contexts/session-provider";
 import instance from "@/lib/axios-config";
 import { CommandIcon, Loader2 } from "lucide-react";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -99,7 +99,7 @@ const Login = () => {
         <GoogleButton loading={googleLoading} setLoading={setGoogleLoading} />
         <Link href={"/register"}>
           <p className="underline underline-offset-4">
-            Don't have an account? Sign Up
+            Don&apos;t have an account? Sign Up
           </p>
         </Link>
       </div>

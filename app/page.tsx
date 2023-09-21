@@ -27,7 +27,7 @@ export default function Home() {
           <p className="w-[70vw] text-center text-slate-500 text-lg">
             Motion offers quick task entry, one-click completion, and easy
             prioritization in a clean, user-friendly interface. With dark mode
-            and instant sync, it's minimalism for maximum productivity.
+            and instant sync, it&apos;s minimalism for maximum productivity.
           </p>
           <div className="grid grid-cols-3 px-20 gap-5">
             <Card>
