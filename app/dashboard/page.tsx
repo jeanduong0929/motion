@@ -65,16 +65,30 @@ const Dashboard = () => {
   const handleDone = async (id: string, completed: boolean) => {
     setLoadingTodoId(id);
     try {
-      await instance.put(`/todo/done`, {
+      await instance.patch(`/todo/done`, {
         id,
         completed,
       });
 
-      setTodos((prevTodos) =>
-        prevTodos.map((todo) =>
-          todo._id === id ? { ...todo, completed: completed } : todo,
-        ),
-      );
+      // Put line-through completed todos and move it to the bottom of the list
+      setTodos((prevTodos) => {
+        // Get the todo to be changed
+        const completedTodo = prevTodos.find((todo) => todo._id === id);
+
+        // Get the incompleted todos
+        const incompletedTodos = prevTodos.filter((todo) => todo._id !== id);
+
+        // Set the completed todo to the new completed value
+        completedTodo!.completed = completed;
+
+        // If the todo is completed
+        if (completed) {
+          // Moves the completed todo to the bottom of the list
+          return [...incompletedTodos, completedTodo!];
+        }
+        // Moves the undone todo to the top of the list
+        return [completedTodo!, ...incompletedTodos];
+      });
     } catch (error: any) {
       console.log(error);
     } finally {
@@ -161,7 +175,7 @@ const Dashboard = () => {
                       <DropdownMenuItem
                         onClick={() => handleDone(todo._id, !todo.completed)}
                       >
-                        Done
+                        {todo.completed ? "Undone" : "Done"}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <Link href={`/dashboard/edit/${todo._id}`}>
