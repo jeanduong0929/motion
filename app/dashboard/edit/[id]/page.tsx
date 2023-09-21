@@ -8,7 +8,7 @@ import instance from "@/lib/axios-config";
 import MySession from "@/models/session";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React from "react";
 
 const EditTodo = ({ params }: { params: { id: string } }) => {
@@ -20,6 +20,7 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
   const { auth, loading } = React.useContext(AuthContext);
   const { toast } = useToast();
   const mySession = session ? (session as MySession) : null;
+  const router = useRouter();
 
   React.useEffect(() => {
     if (!session && !auth) {
@@ -36,18 +37,19 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
     setIsLoading(true);
 
     try {
-      await instance.put("/todo", {
-        title,
+      await instance.patch("/todo/edit", {
         userId: mySession ? mySession!.id : auth!.id,
+        title,
       });
 
       toast({
-        description: "You cannot create an empty todo",
+        description: "Todo updated successfully",
         className: "bg-slate-800 text-white",
       });
-      setTitle("");
+
+      router.push("/dashboard");
     } catch (error: any) {
-      if (error.response.status === 400) {
+      if (error.response && error.response.status === 400) {
         toast({
           variant: "destructive",
           description: "You cannot create an empty todo",
