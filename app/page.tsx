@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-between h-[70vh] mt-24">
+      <div className="flex flex-col items-center justify-between h-[70vh] mt-24 homepage-container">
         <div className="flex flex-col items-center gap-2">
           <h1 className="font-bold text-5xl">Motion: Simplify Your Day</h1>
           <h2 className="text-2xl text-slate-500">

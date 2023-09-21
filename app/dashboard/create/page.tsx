@@ -14,10 +14,19 @@ import NavTodoCreate from "@/components/nav/nav-todo-create";
 const TodoCreate = () => {
   const [title, setTitle] = React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [delayLoading, setDelayLoading] = React.useState<boolean>(true);
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
   const { toast } = useToast();
   const mySession = session as MySession;
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (status !== "loading" && !loading) setDelayLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [status, loading, session, auth]);
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,7 +56,7 @@ const TodoCreate = () => {
     }
   };
 
-  if (status === "loading" || loading) return <Loading />;
+  if (delayLoading) return <Loading />;
 
   if (!session && !auth) {
     redirect("/login");
@@ -57,7 +66,7 @@ const TodoCreate = () => {
     <>
       <NavTodoCreate />
       <form
-        className="flex flex-col items-start gap-5 px-[350px]"
+        className="flex flex-col items-start gap-5 px-[350px] create-todo-container"
         onSubmit={handleForm}
       >
         <input

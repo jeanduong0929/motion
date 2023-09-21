@@ -1,7 +1,7 @@
 "use client";
 import Loading from "@/components/loading";
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { redirect } from "next/navigation";
 import { AuthContext } from "@/contexts/session-provider";
 import Sidebar from "@/components/sidebar";
@@ -19,11 +19,12 @@ import TodoItem from "@/components/todo/todo-item";
 const Dashboard = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [pageLoading, setPageLoading] = React.useState<boolean>(false);
+  const [delayLoading, setDelayLoading] = React.useState<boolean>(false);
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
   const mySession = session ? (session as MySession) : null;
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!session && !auth) {
       redirect("/login");
     }
@@ -31,6 +32,12 @@ const Dashboard = () => {
     if (session || auth) {
       getTodos();
     }
+
+    const timer = setTimeout(() => {
+      if (status === "loading" || loading || pageLoading) setDelayLoading(true);
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [status, loading, session, auth]);
 
   const getTodos = async () => {
@@ -44,6 +51,7 @@ const Dashboard = () => {
       console.log(error);
     } finally {
       setPageLoading(false);
+      setDelayLoading(false);
     }
   };
 
@@ -56,12 +64,12 @@ const Dashboard = () => {
     });
   };
 
-  if (status == "loading" || loading || pageLoading) return <Loading />;
+  if (delayLoading) return <Loading />;
 
   return (
     <>
       <Navbar />
-      <div className="flex w-full border-t py-10">
+      <div className="flex w-full border-t py-10 dashboard-container">
         <Sidebar />
         <div className="flex flex-col items-start gap-5 w-full px-20">
           <div className="flex items-center justify-between w-full">
