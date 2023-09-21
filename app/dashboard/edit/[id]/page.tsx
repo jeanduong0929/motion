@@ -19,7 +19,6 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
   const { toast } = useToast();
-  const mySession = session ? (session as MySession) : null;
   const router = useRouter();
 
   React.useEffect(() => {
@@ -38,7 +37,7 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
 
     try {
       await instance.patch("/todo/edit", {
-        userId: mySession ? mySession!.id : auth!.id,
+        id,
         title,
       });
 
