@@ -111,7 +111,7 @@ const Profile = () => {
                 <h2 className="text-xl font-bold">Change password</h2>
 
                 <p className="text-slate-500 text-sm">
-                  Change password via github
+                  Change password via your auth provider
                 </p>
               </div>
             </div>
