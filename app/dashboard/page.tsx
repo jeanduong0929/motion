@@ -213,11 +213,11 @@ const Dashboard = () => {
               Cancel
             </Button>
             <Button
-              className="bg-red-500 text-black hover:bg-red-800"
+              className="bg-red-500 text-white hover:bg-red-800"
               onClick={() => handleDelete(deleteTodoId)}
             >
               <TrashIcon className="h-4 w-4 mr-2" />
-              Delete Delete
+              Delete
             </Button>
           </DialogFooter>
         </DialogContent>
