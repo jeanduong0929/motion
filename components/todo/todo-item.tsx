@@ -46,16 +46,11 @@ const TodoItem = ({ todo, index, moveTodo, setTodos }: TodoItemProps) => {
         {loadingTodoId === todo._id ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
-          <div>
-            <h1
-              style={{
-                textDecorationLine: todo.completed ? "line-through" : "",
-                textDecorationThickness: todo.completed ? "1.5px" : "",
-              }}
-              className={"font-bold"}
-            >
-              {todo.title}
-            </h1>
+          <div
+            className={`todo-item-container ${todo.completed && "line-through"
+              }`}
+          >
+            <h1 className={"font-bold"}>{todo.title}</h1>
             <TodoDeleteDialog
               openDialog={openDialog}
               setOpenDialog={setOpenDialog}
