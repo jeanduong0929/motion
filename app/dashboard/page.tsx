@@ -1,7 +1,7 @@
 "use client";
 import Loading from "@/components/loading";
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import React, { LegacyRef, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { AuthContext } from "@/contexts/session-provider";
 import Sidebar from "@/components/sidebar";
@@ -15,18 +15,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import instance from "@/lib/axios-config";
 import MySession from "@/models/session";
 import Link from "next/link";
 import Todo from "@/models/todo";
 import Navbar from "@/components/nav/navbar";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import TodoItem from "@/components/todo/todo-item";
 
 const Dashboard = () => {
   const [deleteTodoId, setDeleteTodoId] = React.useState<string>("");
@@ -106,6 +102,15 @@ const Dashboard = () => {
     }
   };
 
+  const moveTodo = (fromIndex: number, toIndex: number) => {
+    setTodos((prevTodos) => {
+      const updatedTodos = [...prevTodos];
+      const [movedTodo] = updatedTodos.splice(fromIndex, 1);
+      updatedTodos.splice(toIndex, 0, movedTodo);
+      return updatedTodos;
+    });
+  };
+
   if (status == "loading" || loading || pageLoading) return <Loading />;
 
   return (
@@ -129,72 +134,20 @@ const Dashboard = () => {
             </Link>
           </div>
 
-          <div className="w-full">
-            {todos &&
-              todos.map((todo: Todo) => (
-                <div
-                  key={todo._id}
-                  className="flex items-center justify-between border px-5 py-4"
-                >
-                  {loadingTodoId === todo._id ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <h1
-                      style={{
-                        textDecorationLine: todo.completed
-                          ? "line-through"
-                          : "",
-                        textDecorationThickness: todo.completed ? "1.5px" : "",
-                      }}
-                      className={"font-bold"}
-                    >
-                      {todo.title}
-                    </h1>
-                  )}
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-4 w-4 cursor-pointer"
-                      >
-                        <circle cx="12" cy="12" r="1"></circle>
-                        <circle cx="12" cy="5" r="1"></circle>
-                        <circle cx="12" cy="19" r="1"></circle>
-                      </svg>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        onClick={() => handleDone(todo._id, !todo.completed)}
-                      >
-                        {todo.completed ? "Undone" : "Done"}
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <Link href={`/dashboard/edit/${todo._id}`}>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                      </Link>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        className="text-red-500"
-                        onClick={() => (
-                          setOpenDialog(true), setDeleteTodoId(todo._id)
-                        )}
-                      >
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              ))}
-          </div>
+          <DndProvider backend={HTML5Backend}>
+            <div className="w-full">
+              {todos &&
+                todos.map((todo: Todo, index: number) => (
+                  <TodoItem
+                    key={todo._id}
+                    todo={todo}
+                    index={index}
+                    moveTodo={moveTodo}
+                    loadingTodoId={loadingTodoId}
+                  />
+                ))}
+            </div>
+          </DndProvider>
         </div>
       </div>
       <Dialog open={openDialog} onOpenChange={() => setOpenDialog(false)}>
