@@ -55,7 +55,7 @@ const Login = () => {
   return (
     <>
       <NavLogin />
-      <div className="flex flex-col items-center justify-center w-[30vw] h-[70vh] mx-auto gap-3">
+      <div className="flex flex-col items-center justify-center w-[30vw] h-[70vh] mx-auto gap-3 login-container">
         <form
           className="flex flex-col items-center justify-center text-center gap-3 w-full"
           onSubmit={handleForm}

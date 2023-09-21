@@ -75,23 +75,15 @@
   }
 }
 
-.homepage-container {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.dashboard-container {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.create-todo-container {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.todo-item-container {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.todo-edit-container {
+.homepage-container,
+.dashboard-container,
+.create-todo-container,
+.todo-item-container,
+.todo-edit-container,
+.profile-container,
+.settings-container,
+.login-container,
+.register-container {
   animation: fadeIn 0.5s ease-in-out;
 }
 

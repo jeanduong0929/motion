@@ -20,12 +20,24 @@ const Profile = () => {
   const [newPassowrdError, setNewPasswordError] = React.useState<string>("");
   const [confirmPasswordError, setConfirmPasswordError] =
     React.useState<string>("");
+  const [newPasswordLoading, setNewPasswordLoading] =
+    React.useState<boolean>(false);
+  const [delayLoading, setDelayLoading] = React.useState<boolean>(true);
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
   const { toast } = useToast();
 
-  const [newPasswordLoading, setNewPasswordLoading] =
-    React.useState<boolean>(false);
+  React.useEffect(() => {
+    if (!session && !auth) {
+      redirect("/login");
+    }
+
+    const timer = setTimeout(() => {
+      if (status !== "loading" && !loading) setDelayLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [status, loading, auth, session]);
 
   const handleNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
@@ -86,16 +98,12 @@ const Profile = () => {
     );
   };
 
-  if (status === "loading" || loading) return <Loading />;
-
-  if (!session && !auth) {
-    redirect("/login");
-  }
+  if (delayLoading) return <Loading />;
 
   return (
     <>
       <Navbar />
-      <div className="flex w-full border-t py-10">
+      <div className="flex w-full border-t py-10 profile-container">
         <Sidebar />
         <div className="flex flex-col items-start gap-5 w-full px-20">
           <div className="flex flex-col items-start gap-2">

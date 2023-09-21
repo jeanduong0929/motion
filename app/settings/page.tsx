@@ -8,19 +8,28 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 const Settings = () => {
+  const [delayLoading, setDelayLoading] = React.useState<boolean>(true);
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
 
-  if (!session && !auth) {
-    redirect("/login");
-  }
+  React.useEffect(() => {
+    if (!session && !auth) {
+      redirect("/login");
+    }
 
-  if (status === "loading" || loading) return <Loading />;
+    const timer = setTimeout(() => {
+      if (status !== "loading" && !loading) setDelayLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [status, loading, auth, session]);
+
+  if (delayLoading) return <Loading />;
 
   return (
     <>
       <Navbar />
-      <div className="flex w-full border-t py-10">
+      <div className="flex w-full border-t py-10 settings-container">
         <Sidebar />
         <div className="flex flex-col items-start gap-5 w-full px-20">
           <div className="flex flex-col items-start gap-2">
