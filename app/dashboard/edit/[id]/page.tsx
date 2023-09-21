@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/contexts/session-provider";
 import instance from "@/lib/axios-config";
-import MySession from "@/models/session";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
@@ -15,6 +14,7 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
   const [title, setTitle] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [todoEditLoading, setTodoEditLoading] = React.useState(false);
+  const [delayLoading, setDelayLoading] = React.useState(true);
   const { id } = params;
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
@@ -26,10 +26,17 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
       redirect("/login");
     }
 
+    const timer = setTimeout(() => {
+      if (status !== "loading" && !loading && !todoEditLoading)
+        setDelayLoading(false);
+    }, 300);
+
     if (session || auth) {
       getTodoById();
     }
-  }, [status, session, auth]);
+
+    return () => clearTimeout(timer);
+  }, [status, loading, session, auth]);
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -72,13 +79,13 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
     }
   };
 
-  if (status == "loading" || loading || todoEditLoading) return <Loading />;
+  if (delayLoading) return <Loading />;
 
   return (
     <>
       <NavTodoCreate />
       <form
-        className="flex flex-col items-start gap-5 px-[350px]"
+        className="flex flex-col items-start gap-5 px-[350px] todo-edit-container"
         onSubmit={handleForm}
       >
         <input
