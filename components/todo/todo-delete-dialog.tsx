@@ -10,7 +10,8 @@ import {
 import { Button } from "../ui/button";
 import instance from "@/lib/axios-config";
 import Todo from "@/models/todo";
-import { TrashIcon } from "lucide-react";
+import { Loader2, TrashIcon } from "lucide-react";
+import { useToast } from "../ui/use-toast";
 
 interface TodoDeleteDialogProps {
   todoId: string;
@@ -25,13 +26,23 @@ const TodoDeleteDialog = ({
   setTodos,
   setOpenDialog,
 }: TodoDeleteDialogProps) => {
+  const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false);
+  const { toast } = useToast();
+
   const handleDelete = async (id: string) => {
+    setDeleteLoading(true);
     try {
       await instance.delete(`/todo/${id}`);
-      setOpenDialog(false);
       setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
+      toast({
+        description: "Todo deleted successfully",
+        className: "bg-slate-800 text-white",
+      });
+      setOpenDialog(false);
     } catch (error: any) {
       console.log(error);
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -55,8 +66,13 @@ const TodoDeleteDialog = ({
             <Button
               className="bg-red-500 text-white hover:bg-red-800"
               onClick={() => handleDelete(todoId)}
+              disabled={deleteLoading}
             >
-              <TrashIcon className="h-4 w-4 mr-2" />
+              {deleteLoading ? (
+                <Loader2 className={"h-4 w-4 mr-2 animate-spin"} />
+              ) : (
+                <TrashIcon className="h-4 w-4 mr-2" />
+              )}
               Delete
             </Button>
           </DialogFooter>

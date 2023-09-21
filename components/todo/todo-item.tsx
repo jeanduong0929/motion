@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { Loader2, TrashIcon } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import instance from "@/lib/axios-config";
 import TodoDeleteDialog from "./todo-delete-dialog";
 
@@ -23,7 +23,6 @@ interface TodoItemProps {
 const TodoItem = ({ todo, index, moveTodo, setTodos }: TodoItemProps) => {
   const [loadingTodoId, setLoadingTodoId] = React.useState<string>("");
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
-  const [deleteTodoId, setDeleteTodoId] = React.useState<string>("");
 
   const [, dragRef] = useDrag({
     type: "TODO",
@@ -139,7 +138,7 @@ const TodoItem = ({ todo, index, moveTodo, setTodos }: TodoItemProps) => {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-red-500"
-              onClick={() => (setOpenDialog(true), setDeleteTodoId(todo._id))}
+              onClick={() => setOpenDialog(true)}
             >
               Delete
             </DropdownMenuItem>
