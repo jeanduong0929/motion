@@ -17,7 +17,7 @@ const GoogleButton = ({ loading, setLoading }: GoogleButtonProps) => {
         onClick={() => {
           setLoading(true);
           signIn("google", {
-            callbackUrl: "https://motion-two-topaz.vercel.app/dashboard",
+            callbackUrl: "https://motion-puce.vercel.app/dashboard",
           });
         }}
       >
