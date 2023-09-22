@@ -91,7 +91,7 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
         <input
           placeholder="Todo title"
           value={title}
-          className="border-none shadow-none focus:outline-none text-5xl placeholder-shown:font-bold font-bold"
+          className="border-none shadow-none focus:outline-none text-5xl placeholder-shown:font-bold font-bold bg-transparent"
           onChange={(e) => setTitle(e.target.value)}
         />
         <Button
