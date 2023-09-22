@@ -48,9 +48,11 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-between h-[70vh] mt-24 homepage-container mx-auto max-w-screen-xl">
+      <div className="flex flex-col items-center justify-between md:h-[70vh] my-24 homepage-container mx-auto max-w-screen-xl w-11/12 gap-20">
         <div className="flex flex-col items-center gap-2">
-          <h1 className="font-bold text-5xl">Motion: Simplify Your Day</h1>
+          <h1 className="font-bold text-3xl md:text-5xl">
+            Motion: Simplify Your Day
+          </h1>
           <h2 className="text-2xl text-slate-500">
             Minimal design, maximum productivity
           </h2>
@@ -59,13 +61,13 @@ export default function Home() {
           </Link>
         </div>
         <div className="flex flex-col items-center gap-5">
-          <h1 className="font-bold text-5xl">Features</h1>
-          <p className="xl:w-[40vw] lg:w-[70vw] text-center text-slate-500 text-lg">
+          <h1 className="font-bold text-3xl md:text-5xl">Features</h1>
+          <p className="xl:w-[40vw] lg:w-[70vw] text-center text-slate-500 text-md md:text-lg max-w-screen-xl">
             Motion offers quick task entry, one-click completion, and easy
             prioritization in a clean, user-friendly interface. With dark mode
             and instant sync, it&apos;s minimalism for maximum productivity.
           </p>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 gap-5 | md:grid-cols-3 max-w-screen-xl">
             {cards.map((card) => (
               <Card key={card.id}>
                 <CardHeader>
@@ -81,8 +83,10 @@ export default function Home() {
         </div>
 
         <div className="w-[70vw] text-center flex flex-col items-center gap-3">
-          <h1 className="font-bold text-5xl">Proudly Open Source</h1>
-          <p className="text-slate-500 text-lg">
+          <h1 className="font-bold text-3xl md:text-5xl">
+            Proudly Open Source
+          </h1>
+          <p className="text-slate-500 text-md md:text-lg">
             Thank you for choosing Motion. Simplify your life, amplify your
             productivity, and make every moment count. Get in Motion today.
           </p>
