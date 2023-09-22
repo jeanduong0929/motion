@@ -17,23 +17,25 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="flex items-center justify-between py-10 xl:px-96 lg:px-20 border-b">
-        <Link href={"/"} className="flex items-center gap-2">
-          <CommandIcon size={"24"} />
-          <h1 className="font-bold text-2xl">Motion</h1>
-        </Link>
+      <div className="w-full border-b">
+        <nav className="flex items-center justify-between py-5 max-w-screen-xl mx-auto w-full">
+          <Link href={"/"} className="flex items-center gap-2">
+            <CommandIcon size={"24"} />
+            <h1 className="font-bold text-2xl">Motion</h1>
+          </Link>
 
-        <div className="flex items-center gap-10">
-          <ModeToggle />
-          {session || auth ? (
-            <UserDropdown />
-          ) : (
-            <Link href={"/login"}>
-              <Button>Login</Button>
-            </Link>
-          )}
-        </div>
-      </nav>
+          <div className="flex items-center gap-10">
+            <ModeToggle />
+            {session || auth ? (
+              <UserDropdown />
+            ) : (
+              <Link href={"/login"}>
+                <Button>Login</Button>
+              </Link>
+            )}
+          </div>
+        </nav>
+      </div>
     </>
   );
 };

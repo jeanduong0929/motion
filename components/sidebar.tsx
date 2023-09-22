@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { Button } from "./ui/button";
 
-const Sidebar = ({ ...props }) => {
+const Sidebar = () => {
   const pathname = usePathname();
 
   const options = [
@@ -34,10 +34,7 @@ const Sidebar = ({ ...props }) => {
 
   return (
     <>
-      <div
-        className={`flex flex-col items-start pl-20 w-[350px] gap-2`}
-        {...props}
-      >
+      <div className={"flex flex-col items-start gap-2 w-[245px]"}>
         {options.map((option) => (
           <Link key={option.id} href={option.href} className="w-full">
             <Button

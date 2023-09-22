@@ -29,7 +29,7 @@ const Settings = () => {
   return (
     <>
       <Navbar />
-      <div className="flex py-10 settings-container xl:w-[77vw] mx-auto">
+      <div className="flex py-10 settings-container sm:pr-10 lg:px-10 xl:px-80 mx-auto">
         <Sidebar />
         <div className="flex flex-col items-start gap-5 w-full pl-10 pr-20">
           <div className="flex flex-col items-start gap-2">

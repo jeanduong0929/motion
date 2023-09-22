@@ -48,7 +48,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-between h-[70vh] mt-24 homepage-container">
+      <div className="flex flex-col items-center justify-between h-[70vh] mt-24 homepage-container mx-auto max-w-screen-xl">
         <div className="flex flex-col items-center gap-2">
           <h1 className="font-bold text-5xl">Motion: Simplify Your Day</h1>
           <h2 className="text-2xl text-slate-500">
@@ -58,14 +58,14 @@ export default function Home() {
             <Button>Get Started</Button>
           </Link>
         </div>
-        <div className="flex flex-col items-center gap-5 xl:w-[90vh] lg:w-[80vh]">
+        <div className="flex flex-col items-center gap-5">
           <h1 className="font-bold text-5xl">Features</h1>
           <p className="xl:w-[40vw] lg:w-[70vw] text-center text-slate-500 text-lg">
             Motion offers quick task entry, one-click completion, and easy
             prioritization in a clean, user-friendly interface. With dark mode
             and instant sync, it&apos;s minimalism for maximum productivity.
           </p>
-          <div className="grid grid-cols-3 px-20 gap-5">
+          <div className="grid grid-cols-3 gap-5">
             {cards.map((card) => (
               <Card key={card.id}>
                 <CardHeader>

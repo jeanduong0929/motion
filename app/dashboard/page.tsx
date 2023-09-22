@@ -85,9 +85,9 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <div className="flex py-10 dashboard-container xl:w-[77vw] mx-auto">
+      <div className="flex py-10 dashboard-container max-w-screen-xl  mx-auto">
         <Sidebar />
-        <div className="flex flex-col items-start gap-5 w-full pl-10 pr-20">
+        <div className="flex flex-col items-start gap-5 w-full pl-10">
           <div className="flex items-center justify-between w-full">
             <div className="flex flex-col items-start gap-2">
               <h1 className="text-4xl font-bold">Todos</h1>
