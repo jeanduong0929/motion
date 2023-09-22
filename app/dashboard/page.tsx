@@ -46,7 +46,14 @@ const Dashboard = () => {
       const { data } = await instance.get(
         `/todo/user/${mySession ? mySession!.id : auth ? auth!.id : ""}`,
       );
-      setTodos(data);
+
+      setTodos(
+        data.sort((a: Todo, b: Todo) => {
+          if (a.completed && !b.completed) return 1;
+          if (!a.completed && b.completed) return -1;
+          return 0;
+        }),
+      );
     } catch (error: any) {
       console.log(error);
     } finally {
