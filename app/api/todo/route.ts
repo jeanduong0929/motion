@@ -24,8 +24,6 @@ export const POST = async (req: NextRequest) => {
 
     let newOrder = incompleteTodos.length;
 
-    console.log("Order: ", newOrder);
-
     // Add the new todo order to the end of the list.
     await TodoEntity.create({
       title,
