@@ -34,7 +34,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className={"flex flex-col items-start gap-2 w-[245px]"}>
+      <div className={"hidden md:flex flex-col items-start gap-2 w-[245px]"}>
         {options.map((option) => (
           <Link key={option.id} href={option.href} className="w-full">
             <Button
