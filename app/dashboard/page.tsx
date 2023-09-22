@@ -49,13 +49,7 @@ const Dashboard = () => {
       );
 
       // Get the todos from incompleted to completed
-      setTodos(
-        data.sort((a: Todo, b: Todo) => {
-          if (a.completed && !b.completed) return 1;
-          if (!a.completed && b.completed) return -1;
-          return 0;
-        }),
-      );
+      setTodos(data);
     } catch (error: any) {
       console.log(error);
     } finally {
