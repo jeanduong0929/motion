@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CommandIcon, Loader2 } from "lucide-react";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import { redirect } from "next/navigation";
@@ -99,7 +99,7 @@ const Register = () => {
       <div className="flex items-center w-full h-full register-container">
         <div className="w-1/2 bg-slate-800 h-screen" />
         <form
-          className="flex flex-col items-center text-center w-[30vw] mx-auto gap-3"
+          className="flex flex-col items-center text-center xl:w-[16vw] lg:w-[30vw]  mx-auto gap-3"
           onSubmit={handleForm}
         >
           <CommandIcon size={30} />
