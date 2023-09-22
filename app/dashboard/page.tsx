@@ -15,6 +15,7 @@ import Navbar from "@/components/nav/navbar";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TodoItem from "@/components/todo/todo-item";
+import debounce from "lodash.debounce";
 
 const Dashboard = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
@@ -63,14 +64,27 @@ const Dashboard = () => {
     }
   };
 
-  const moveTodo = (fromIndex: number, toIndex: number) => {
+  const moveTodo = async (fromIndex: number, toIndex: number) => {
     setTodos((prevTodos) => {
       const updatedTodos = [...prevTodos];
       const [movedTodo] = updatedTodos.splice(fromIndex, 1);
       updatedTodos.splice(toIndex, 0, movedTodo);
+      updateOrder(updatedTodos);
       return updatedTodos;
     });
   };
+
+  const updateOrder = debounce(async (updatedTodos: Todo[]) => {
+    const prevTodos = [...todos];
+    try {
+      instance.patch("/todo/update", {
+        todos: updatedTodos,
+      });
+    } catch (error: any) {
+      console.log(error);
+      setTodos(prevTodos);
+    }
+  }, 1000);
 
   if (delayLoading) return <Loading />;
 

@@ -1,6 +1,13 @@
 import mongoose from "mongoose";
 
-const todoSchema = new mongoose.Schema(
+export interface TodoDocumnet extends mongoose.Document {
+  title: string;
+  completed: boolean;
+  order: number;
+  user: mongoose.Schema.Types.ObjectId;
+}
+
+const todoSchema = new mongoose.Schema<TodoDocumnet>(
   {
     title: {
       type: String,
@@ -9,6 +16,10 @@ const todoSchema = new mongoose.Schema(
     completed: {
       type: Boolean,
       default: false,
+    },
+    order: {
+      type: Number,
+      required: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
