@@ -58,9 +58,9 @@ export default function Home() {
             <Button>Get Started</Button>
           </Link>
         </div>
-        <div className="flex flex-col items-center gap-5">
+        <div className="flex flex-col items-center gap-5 lg:w-[90vh]">
           <h1 className="font-bold text-5xl">Features</h1>
-          <p className="w-[70vw] text-center text-slate-500 text-lg">
+          <p className="lg:w-[40vw] text-center text-slate-500 text-lg">
             Motion offers quick task entry, one-click completion, and easy
             prioritization in a clean, user-friendly interface. With dark mode
             and instant sync, it&apos;s minimalism for maximum productivity.

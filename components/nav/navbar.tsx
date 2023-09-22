@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="flex items-center justify-between px-20 py-10">
+      <nav className="flex items-center justify-between py-10 lg:px-96">
         <Link href={"/"} className="flex items-center gap-2">
           <CommandIcon size={"24"} />
           <h1 className="font-bold text-2xl">Motion</h1>
