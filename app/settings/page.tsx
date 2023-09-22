@@ -31,7 +31,7 @@ const Settings = () => {
       <Navbar />
       <div className="flex w-full border-t py-10 settings-container">
         <Sidebar />
-        <div className="flex flex-col items-start gap-5 w-full px-20">
+        <div className="flex flex-col items-start gap-5 w-full pl-10 pr-20">
           <div className="flex flex-col items-start gap-2">
             <h1 className="text-4xl font-bold">Settings</h1>
             <h3 className="text-slate-500 text-lg">Manage your settings</h3>

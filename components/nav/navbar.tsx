@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import UserDropdown from "./userdropdown";
 import Loading from "../loading";
 import { AuthContext } from "@/contexts/session-provider";
+import { ModeToggle } from "./theme-toggle";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -21,13 +22,17 @@ const Navbar = () => {
           <CommandIcon size={"24"} />
           <h1 className="font-bold text-2xl">Motion</h1>
         </Link>
-        {session || auth ? (
-          <UserDropdown />
-        ) : (
-          <Link href={"/login"}>
-            <Button>Login</Button>
-          </Link>
-        )}
+
+        <div className="flex items-center gap-10">
+          <ModeToggle />
+          {session || auth ? (
+            <UserDropdown />
+          ) : (
+            <Link href={"/login"}>
+              <Button>Login</Button>
+            </Link>
+          )}
+        </div>
       </nav>
     </>
   );

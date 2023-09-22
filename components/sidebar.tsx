@@ -3,6 +3,7 @@ import { ListTodo, SettingsIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { Button } from "./ui/button";
 
 const Sidebar = ({ ...props }) => {
   const pathname = usePathname();
@@ -38,15 +39,13 @@ const Sidebar = ({ ...props }) => {
         {...props}
       >
         {options.map((option) => (
-          <Link
-            key={option.id}
-            href={option.href}
-            className={`flex items-center gap-2 w-full px-2 py-2 hover:bg-slate-200 rounded-md ${
-              option.selected && "bg-slate-200"
-            }`}
-          >
-            {option.icon}
-            <p>{option.name}</p>
+          <Link key={option.id} href={option.href} className="w-full">
+            <Button
+              className="flex items-center justify-start gap-2 w-full"
+              variant={`${option.selected ? "secondary" : "ghost"}`}
+            >
+              {option.icon} <p>{option.name}</p>
+            </Button>
           </Link>
         ))}
       </div>

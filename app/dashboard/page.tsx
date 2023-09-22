@@ -47,6 +47,7 @@ const Dashboard = () => {
         `/todo/user/${mySession ? mySession!.id : auth ? auth!.id : ""}`,
       );
 
+      // Get the todos from incompleted to completed
       setTodos(
         data.sort((a: Todo, b: Todo) => {
           if (a.completed && !b.completed) return 1;
@@ -78,7 +79,7 @@ const Dashboard = () => {
       <Navbar />
       <div className="flex w-full border-t py-10 dashboard-container">
         <Sidebar />
-        <div className="flex flex-col items-start gap-5 w-full px-20">
+        <div className="flex flex-col items-start gap-5 w-full pl-10 pr-20">
           <div className="flex items-center justify-between w-full">
             <div className="flex flex-col items-start gap-2">
               <h1 className="text-4xl font-bold">Todos</h1>

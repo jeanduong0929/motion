@@ -66,13 +66,13 @@ const TodoCreate = () => {
     <>
       <NavTodoCreate />
       <form
-        className="flex flex-col items-start gap-5 px-[350px] create-todo-container"
+        className="flex flex-col items-start gap-5 px-[300px] create-todo-container"
         onSubmit={handleForm}
       >
         <input
           placeholder="Todo title"
           value={title}
-          className="border-none shadow-none focus:outline-none text-5xl placeholder-shown:font-bold font-bold"
+          className="border-none shadow-none focus:outline-none text-5xl placeholder-shown:font-bold font-bold bg-transparent"
           onChange={(e) => setTitle(e.target.value)}
         />
         <Button
