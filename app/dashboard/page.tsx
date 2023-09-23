@@ -16,6 +16,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TodoItem from "@/components/todo/todo-item";
 import debounce from "lodash.debounce";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const Dashboard = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
@@ -103,21 +104,23 @@ const Dashboard = () => {
             </Link>
           </div>
 
-          <DndProvider backend={HTML5Backend}>
-            <div className="w-full">
-              {todos &&
-                todos.map((todo: Todo, index: number) => (
-                  <TodoItem
-                    key={todo._id}
-                    todo={todo}
-                    index={index}
-                    moveTodo={moveTodo}
-                    setTodos={setTodos}
-                    updateOrder={updateOrder}
-                  />
-                ))}
-            </div>
-          </DndProvider>
+          <ScrollArea className="h-[50vh] w-full">
+            <DndProvider backend={HTML5Backend}>
+              <div className="w-full">
+                {todos &&
+                  todos.map((todo: Todo, index: number) => (
+                    <TodoItem
+                      key={todo._id}
+                      todo={todo}
+                      index={index}
+                      moveTodo={moveTodo}
+                      setTodos={setTodos}
+                      updateOrder={updateOrder}
+                    />
+                  ))}
+              </div>
+            </DndProvider>
+          </ScrollArea>
         </div>
       </div>
     </>

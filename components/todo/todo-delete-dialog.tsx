@@ -29,11 +29,11 @@ const TodoDeleteDialog = ({
   const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false);
   const { toast } = useToast();
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async () => {
     setDeleteLoading(true);
     try {
-      await instance.delete(`/todo/${id}`);
-      setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
+      await instance.delete(`/todo/${todoId}`);
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== todoId));
       toast({
         description: "Todo deleted successfully",
         className: "bg-slate-800 text-white",
@@ -58,6 +58,7 @@ const TodoDeleteDialog = ({
           </DialogHeader>
           <DialogFooter>
             <Button
+              type="button"
               className="hover:bg-slate-700"
               onClick={() => setOpenDialog(false)}
             >
@@ -65,8 +66,9 @@ const TodoDeleteDialog = ({
             </Button>
             <Button
               className="bg-red-500 text-white hover:bg-red-800"
-              onClick={() => handleDelete(todoId)}
               disabled={deleteLoading}
+              type="submit"
+              onClick={handleDelete}
             >
               {deleteLoading ? (
                 <Loader2 className={"h-4 w-4 mr-2 animate-spin"} />
