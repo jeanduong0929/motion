@@ -1,5 +1,5 @@
 "use client";
-import { ListTodo, SettingsIcon, UserIcon } from "lucide-react";
+import { FileIcon, ListTodo, SettingsIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -25,6 +25,13 @@ const Sidebar = () => {
     },
     {
       id: "3",
+      name: "Notes",
+      href: "/notes",
+      icon: <FileIcon size={24} />,
+      selected: pathname === "/notes",
+    },
+    {
+      id: "4",
       name: "Settings",
       href: "/settings",
       icon: <SettingsIcon size={24} />,

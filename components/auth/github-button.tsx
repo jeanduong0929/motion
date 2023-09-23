@@ -17,7 +17,7 @@ const GithubButton = ({ loading, setLoading }: GithubButtonProps) => {
         onClick={() => {
           setLoading(true);
           signIn("github", {
-            callbackUrl: "https://motion-puce.vercel.app/dashboard",
+            callbackUrl: "http://localhost:3000/dashboard",
           });
         }}
       >
