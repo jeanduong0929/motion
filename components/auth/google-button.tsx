@@ -17,7 +17,7 @@ const GoogleButton = ({ loading, setLoading }: GoogleButtonProps) => {
         onClick={() => {
           setLoading(true);
           signIn("google", {
-            callbackUrl: "http://localhost:3000/dashboard",
+            callbackUrl: "https://motion-puce.vercel.app/dashboard",
           });
         }}
       >
