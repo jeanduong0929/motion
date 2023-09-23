@@ -13,7 +13,6 @@ const Ace = () => {
     <>
       <AceEditor
         style={{ width: "50%", height: "100vh" }}
-        className="font-mono"
         mode="markdown"
         theme="one_dark"
         name="markdown_editor"

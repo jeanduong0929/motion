@@ -9,7 +9,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import MySession from "@/models/session";
-import NavTodoCreate from "@/components/nav/nav-todo-create";
+import NavCreate from "@/components/nav/nav-create";
 
 const TodoCreate = () => {
   const [title, setTitle] = React.useState<string>("");
@@ -64,7 +64,7 @@ const TodoCreate = () => {
 
   return (
     <>
-      <NavTodoCreate />
+      <NavCreate />
       <form
         className="flex flex-col items-start gap-5 px-[300px] create-todo-container"
         onSubmit={handleForm}

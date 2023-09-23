@@ -8,6 +8,9 @@ module.exports = {
     './src/**/*.{ts,tsx}',
 	],
   theme: {
+    fontFamily: {
+      'fira-code': ['Fira Code', 'monospace'],
+    },
     container: {
       center: true,
       padding: "2rem",

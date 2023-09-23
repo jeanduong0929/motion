@@ -1,6 +1,6 @@
 "use client";
 import Loading from "@/components/loading";
-import NavTodoCreate from "@/components/nav/nav-todo-create";
+import NavCreate from "@/components/nav/nav-create";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/contexts/session-provider";
@@ -83,7 +83,7 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <NavTodoCreate />
+      <NavCreate />
       <form
         className="flex flex-col items-start gap-5 px-[350px] todo-edit-container"
         onSubmit={handleForm}

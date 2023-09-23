@@ -6,7 +6,7 @@ import React from "react";
 import Loading from "../loading";
 import { redirect } from "next/navigation";
 
-const NavTodoCreate = () => {
+const NavCreate = () => {
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
 
@@ -18,7 +18,7 @@ const NavTodoCreate = () => {
 
   return (
     <>
-      <nav className="flex items-center justify-between px-20 py-10">
+      <nav className="flex items-center justify-between px-10 py-5">
         <div>
           <Link
             href={"/dashboard"}
@@ -33,4 +33,4 @@ const NavTodoCreate = () => {
   );
 };
 
-export default NavTodoCreate;
+export default NavCreate;
