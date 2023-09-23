@@ -4,11 +4,16 @@ import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-markdown";
 import "ace-builds/src-noconflict/theme-one_dark";
+import "ace-builds/src-noconflict/theme-one_dark";
 import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/keybinding-vim";
 import ace from "ace-builds/src-noconflict/ace";
 
-const Ace = () => {
+interface AceProps {
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const Ace = ({ setValue }: AceProps) => {
   return (
     <>
       <AceEditor
@@ -17,6 +22,7 @@ const Ace = () => {
         theme="one_dark"
         name="markdown_editor"
         editorProps={{ $blockScrolling: true }}
+        onChange={(value) => setValue(value)}
         setOptions={{
           fontSize: "16px",
           enableBasicAutocompletion: true,
