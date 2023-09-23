@@ -98,12 +98,7 @@
 }
 
 .markdown-body {
-  box-sizing: border-box;
-  min-width: 200px;
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 45px;
-  height: 100%;
+  @apply bg-transparent pl-5 pt-5 !important;
 }
 
 @media (max-width: 767px) {
