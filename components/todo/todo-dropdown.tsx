@@ -15,6 +15,7 @@ interface TodoDropdownProps {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   setLoadingTodoId: React.Dispatch<React.SetStateAction<string>>;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  updateOrder: (todos: Todo[]) => void;
 }
 
 const TodoDropdown = ({
@@ -22,6 +23,7 @@ const TodoDropdown = ({
   setTodos,
   setLoadingTodoId,
   setOpenDialog,
+  updateOrder,
 }: TodoDropdownProps) => {
   const handleDone = async (id: string, completed: boolean) => {
     setLoadingTodoId(id);
@@ -44,9 +46,13 @@ const TodoDropdown = ({
 
         // If the todo is completed
         if (completed) {
+          updateOrder([...incompletedTodos, completedTodo!]);
+
           // Moves the completed todo to the bottom of the list
           return [...incompletedTodos, completedTodo!];
         }
+
+        updateOrder([completedTodo!, ...incompletedTodos]);
         // Moves the undone todo to the top of the list
         return [completedTodo!, ...incompletedTodos];
       });

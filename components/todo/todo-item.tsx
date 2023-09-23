@@ -10,9 +10,16 @@ interface TodoItemProps {
   index: number;
   moveTodo: (dragIndex: number, hoverIndex: number) => void;
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  updateOrder: (todos: Todo[]) => void;
 }
 
-const TodoItem = ({ todo, index, moveTodo, setTodos }: TodoItemProps) => {
+const TodoItem = ({
+  todo,
+  index,
+  moveTodo,
+  setTodos,
+  updateOrder,
+}: TodoItemProps) => {
   const [loadingTodoId, setLoadingTodoId] = React.useState<string>("");
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
 
@@ -47,8 +54,9 @@ const TodoItem = ({ todo, index, moveTodo, setTodos }: TodoItemProps) => {
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
           <div
-            className={`todo-item-container ${todo.completed && "line-through"
-              }`}
+            className={`todo-item-container ${
+              todo.completed && "line-through"
+            }`}
           >
             <h1 className={"font-bold"}>{todo.title}</h1>
             <TodoDeleteDialog
@@ -64,6 +72,7 @@ const TodoItem = ({ todo, index, moveTodo, setTodos }: TodoItemProps) => {
           setTodos={setTodos}
           setLoadingTodoId={setLoadingTodoId}
           setOpenDialog={setOpenDialog}
+          updateOrder={updateOrder}
         />
       </div>
     </>

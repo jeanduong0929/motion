@@ -20,7 +20,7 @@ import debounce from "lodash.debounce";
 const Dashboard = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [pageLoading, setPageLoading] = React.useState<boolean>(false);
-  const [delayLoading, setDelayLoading] = React.useState<boolean>(false);
+  const [delayLoading, setDelayLoading] = React.useState<boolean>(true);
   const { data: session, status } = useSession();
   const { auth, loading } = React.useContext(AuthContext);
   const mySession = session ? (session as MySession) : null;
@@ -35,7 +35,8 @@ const Dashboard = () => {
     }
 
     const timer = setTimeout(() => {
-      if (status === "loading" || loading || pageLoading) setDelayLoading(true);
+      if (status !== "loading" && !loading && !pageLoading)
+        setDelayLoading(false);
     }, 300);
 
     return () => clearTimeout(timer);
@@ -54,7 +55,6 @@ const Dashboard = () => {
       console.log(error);
     } finally {
       setPageLoading(false);
-      setDelayLoading(false);
     }
   };
 
@@ -113,6 +113,7 @@ const Dashboard = () => {
                     index={index}
                     moveTodo={moveTodo}
                     setTodos={setTodos}
+                    updateOrder={updateOrder}
                   />
                 ))}
             </div>
