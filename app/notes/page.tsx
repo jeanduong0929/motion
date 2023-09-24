@@ -13,8 +13,6 @@ import { PlusIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import React from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 const Notes = () => {
   const [open, setOpen] = React.useState<boolean>(false);
@@ -45,6 +43,8 @@ const Notes = () => {
     if (!session && !auth) {
       redirect("/login");
     }
+
+    sessionStorage.setItem("path", "/notes");
 
     getNotes();
 

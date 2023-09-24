@@ -20,13 +20,30 @@ const Login = () => {
   const [signInLoading, setSignInLoading] = React.useState<boolean>(false);
   const [githubLoading, setGithubLoading] = React.useState<boolean>(false);
   const [googleLoading, setGoogleLoading] = React.useState<boolean>(false);
+  const [delayLoading, setDelayLoading] = React.useState<boolean>(true);
   const { data: session, status } = useSession();
-  const { auth, setAuth, loading } = React.useContext(AuthContext);
+  const { _, setAuth, loading } = React.useContext(AuthContext);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (status !== "loading" && !loading) setDelayLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  React.useEffect(() => {
+    const path = sessionStorage.getItem("path");
+
+    if (path) {
+      redirect(path);
+    }
+    redirect("/dashboard");
+  }, []);
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSignInLoading(true);
-
     try {
       const { data } = await instance.post("/auth/login", {
         email,
@@ -46,11 +63,7 @@ const Login = () => {
     }
   };
 
-  if (status === "loading" || loading) return <Loading />;
-
-  if (session || auth) {
-    redirect("/dashboard");
-  }
+  if (delayLoading) return <Loading />;
 
   return (
     <>

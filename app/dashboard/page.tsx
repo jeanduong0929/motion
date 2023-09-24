@@ -27,6 +27,8 @@ const Dashboard = () => {
   const mySession = session ? (session as MySession) : null;
 
   React.useEffect(() => {
+    sessionStorage.setItem("path", "/dashboard");
+
     if (!session && !auth) {
       redirect("/login");
     }
