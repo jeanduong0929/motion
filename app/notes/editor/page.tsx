@@ -23,7 +23,6 @@ const Editor = () => {
 
         <ScrollArea className="h-[100vh] w-1/2">
           <ReactMarkdown
-            children={value}
             className="markdown-body prose"
             remarkPlugins={[remarkGfm]}
             components={{
@@ -32,11 +31,12 @@ const Editor = () => {
                 return !inline && match ? (
                   <SyntaxHighlighter
                     {...props}
-                    children={String(children).replace(/\n$/, "")}
                     style={gruvboxDark}
                     language={match[1]}
                     PreTag="div"
-                  />
+                  >
+                    {String(children).replace(/\n$/, "")}
+                  </SyntaxHighlighter>
                 ) : (
                   <code {...props} className={className}>
                     {children}
@@ -44,7 +44,9 @@ const Editor = () => {
                 );
               },
             }}
-          ></ReactMarkdown>
+          >
+            {value}
+          </ReactMarkdown>
         </ScrollArea>
       </div>
     </>
