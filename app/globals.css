@@ -84,7 +84,8 @@
 .profile-container,
 .settings-container,
 .login-container,
-.register-container {
+.register-container,
+.notes-container {
   animation: fadeIn 0.5s ease-in-out;
 }
 
