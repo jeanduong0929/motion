@@ -28,7 +28,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Session>
-            <div className="flex flex-col min-h-screen">
+            <div className="flex flex-col min-h-screen container-fade-in">
               <main className="flex-grow">{children}</main>
               <Footer />
               <Toaster />

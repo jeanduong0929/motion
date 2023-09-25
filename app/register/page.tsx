@@ -105,11 +105,23 @@ const Register = () => {
     }
   };
 
-  const isValidEmail = (email: string) => {
+  /**
+   * The purpose of this method is to validate the email using regex
+   *
+   * @param {string} email - The email to validate
+   * @returns {boolean} - Whether the email is valid or not
+   */
+  const isValidEmail = (email: string): boolean => {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
   };
 
-  const isValidPassword = (password: string) => {
+  /**
+   * The purpose of this method is to validate the password using regex
+   *
+   * @param {string} password - The password to validate
+   * @returns {boolean} - Whether the password is valid or not
+   */
+  const isValidPassword = (password: string): boolean => {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
       password,
     );

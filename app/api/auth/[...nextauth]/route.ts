@@ -1,11 +1,20 @@
-import AccountEntity from "@/entities/account-entity";
-import UserEntity from "@/entities/user-entity";
-import connectDB from "@/lib/db";
+// Next.js and Next-Auth
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import jwt from "jsonwebtoken";
 import CredentialsProvider from "next-auth/providers/credentials";
+
+// External Libraries and Dependencies
+import jwt from "jsonwebtoken";
+
+// Custom Entities
+import AccountEntity from "@/entities/account-entity";
+import UserEntity from "@/entities/user-entity";
+
+// Database Connection
+import connectDB from "@/lib/db";
+
+// API and Network
 import instance from "@/lib/axios-config";
 
 const handler = NextAuth({
@@ -54,6 +63,7 @@ const handler = NextAuth({
       let providerId,
         providerType = "";
 
+      // Set the provider id and type based on the provider
       if (account.provider === "github") {
         providerId = profile.id;
         providerType = "github";

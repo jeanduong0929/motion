@@ -28,10 +28,8 @@ import instance from "@/lib/axios-config";
 import { PlusIcon } from "lucide-react";
 
 const Dashboard = () => {
-  // Todo states
+  // State variables
   const [todos, setTodos] = React.useState<Todo[]>([]);
-
-  // Session
   const { data: session } = useSession();
   const mySession = session ? (session as MySession) : null;
 
@@ -44,9 +42,8 @@ const Dashboard = () => {
    * @returns {void}
    */
   React.useEffect(() => {
-    sessionStorage.setItem("path", "/dashboard");
     getTodos();
-  }, []);
+  }, [session]);
 
   /**
    * The purpose of this function is to get the todos from the database
@@ -87,7 +84,14 @@ const Dashboard = () => {
     });
   };
 
-  const updateOrder = debounce(async (updatedTodos: Todo[]) => {
+  /**
+   * The purpose of this function is to update the order of the Todos
+   * in the database after a drag and drop event
+   *
+   * @param {Todo[]} updatedTodos - The updated todos
+   * @returns {Promise<void>}
+   */
+  const updateOrder = debounce(async (updatedTodos: Todo[]): Promise<void> => {
     const prevTodos = [...todos];
     try {
       instance.patch("/todo/update", {
@@ -104,7 +108,7 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <div className="flex py-10 dashboard-container max-w-screen-xl mx-auto w-11/12">
+      <div className="flex py-10 max-w-screen-xl mx-auto w-11/12">
         <Sidebar />
         <div className="flex flex-col items-start gap-5 w-full pl-10">
           <div className="flex items-center justify-between w-full">

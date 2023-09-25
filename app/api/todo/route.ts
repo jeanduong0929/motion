@@ -2,7 +2,13 @@ import TodoEntity from "@/entities/todo-entity";
 import connectDB from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req: NextRequest) => {
+/**
+ * The purpose of this endpoint is to create a new todo.
+ *
+ * @param {NextRequest} req - The incoming request object
+ * @returns {NextResponse} - The outgoing response object
+ */
+export const POST = async (req: NextRequest): Promise<NextResponse> => {
   const { title, userId } = await req.json();
 
   // If the title is empty, return a 400 Bad Request response.
@@ -42,5 +48,6 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  // Return a 201 Created response.
   return NextResponse.json({}, { status: 201 });
 };

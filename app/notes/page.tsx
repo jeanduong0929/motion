@@ -1,31 +1,55 @@
 "use client";
+
+// React and Next-Auth
+import React from "react";
+import { useSession } from "next-auth/react";
+
+// Custom Components
 import Navbar from "@/components/nav/navbar";
 import NoteCategoryDialog from "@/components/notes/note-category-dialog";
 import Sidebar from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import instance from "@/lib/axios-config";
+
+// Models and Data
 import NoteCategory from "@/models/note-category";
 import MySession from "@/models/session";
+
+// API and Network
+import instance from "@/lib/axios-config";
+
+// Icons and Graphics
 import { PlusIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
-import React from "react";
 
 const Notes = () => {
-  // Dialog state
+  // State Variables
   const [open, setOpen] = React.useState<boolean>(false);
-
-  // Loading states
   const [_, setNotesLoading] = React.useState<boolean>(false);
   const [noteCategories, setNoteCategories] = React.useState<NoteCategory[]>(
     [],
   );
 
-  // Session
+  // Session Handling
   const { data: session } = useSession();
   const mySession = session ? (session as MySession) : null;
 
-  const getNotes = async () => {
+  /* ############################## METHODS ############################## */
+
+  /**
+   * The purpose of this function is to fetch the notes when the component mounts
+   *
+   * @returns {void}
+   */
+  React.useEffect(() => {
+    getNotes();
+  }, [session]);
+
+  /**
+   * The purpose of this function is to get the notes from the database
+   *
+   * @returns {Promise<void>}
+   */
+  const getNotes = async (): Promise<void> => {
     setNotesLoading(true);
     try {
       const { data } = await instance.get(`notes/category/${mySession!.id}`);
@@ -37,15 +61,12 @@ const Notes = () => {
     }
   };
 
-  React.useEffect(() => {
-    sessionStorage.setItem("path", "/notes");
-    getNotes();
-  }, []);
+  /* ############################## RENDER ############################## */
 
   return (
     <>
       <Navbar />
-      <div className="flex py-10 max-w-screen-xl mx-auto w-11/12 notes-container">
+      <div className="flex py-10 max-w-screen-xl mx-auto w-11/12">
         <Sidebar />
         <div className="flex flex-col items-start gap-5 w-full pl-10">
           <div className="flex items-center justify-between w-full">
