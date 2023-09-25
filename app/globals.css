@@ -76,20 +76,6 @@
   }
 }
 
-.homepage-container,
-.dashboard-container,
-.create-todo-container,
-.todo-item-container,
-.todo-edit-container,
-.profile-container,
-.settings-container,
-.login-container,
-.register-container,
-.notes-container {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-
 .container-fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }

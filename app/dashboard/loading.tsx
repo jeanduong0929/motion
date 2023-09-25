@@ -1,12 +1,5 @@
-import Loading from "@/components/loading";
-import React from "react";
-
-const DashboardLoader = () => {
-  return (
-    <>
-      return <Loading />
-    </>
-  );
+const DashboardPageLoader = () => {
+  return null;
 };
 
-export default DashboardLoader;
+export default DashboardPageLoader;

@@ -1,23 +1,48 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import instance from "@/lib/axios-config";
-import { Loader2 } from "lucide-react";
-import { useSession } from "next-auth/react";
+
+// React and Next-Auth
 import React from "react";
+import { useSession } from "next-auth/react";
+
+// Custom UI Components
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+
+// Models and Data
 import MySession from "@/models/session";
+
+// API and Network
+import instance from "@/lib/axios-config";
+
+// Custom Components
 import NavCreate from "@/components/nav/nav-create";
 
 const TodoCreate = () => {
+  // State Variables
   const [title, setTitle] = React.useState<string>("");
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [buttonLoading, setButtonLoading] = React.useState<boolean>(false);
+
+  // Session Handling
   const { data: session } = useSession();
-  const { toast } = useToast();
   const mySession = session as MySession;
 
-  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Custom Hook
+  const { toast } = useToast();
+
+  /* ############################# METHODS ############################# */
+
+  /**
+   * The purpose of this method is to handle saving the todo form
+   *
+   * @param e - The form event
+   * @returns {Promise<void>}
+   */
+  const handleForm = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
-    setIsLoading(true);
+    setButtonLoading(true);
 
     try {
       await instance.post("/todo", {
@@ -39,15 +64,17 @@ const TodoCreate = () => {
         });
       }
     } finally {
-      setIsLoading(false);
+      setButtonLoading(false);
     }
   };
+
+  /* ############################# RENDER ############################# */
 
   return (
     <>
       <NavCreate />
       <form
-        className="flex flex-col items-start gap-5 px-[300px] create-todo-container"
+        className="flex flex-col items-start gap-5 px-[300px] container-fade-in"
         onSubmit={handleForm}
       >
         <input
@@ -59,9 +86,9 @@ const TodoCreate = () => {
         <Button
           className="absolute top-10 right-20"
           type="submit"
-          disabled={isLoading}
+          disabled={buttonLoading}
         >
-          {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+          {buttonLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
           Save
         </Button>
       </form>

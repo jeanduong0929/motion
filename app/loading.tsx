@@ -1,8 +1,5 @@
-import Loading from "@/components/loading";
-import React from "react";
-
-const PageLoader = () => {
-  return <Loading />;
+const HomePageLoader = () => {
+  return null;
 };
 
-export default PageLoader;
+export default HomePageLoader;

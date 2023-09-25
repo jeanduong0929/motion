@@ -48,7 +48,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-between md:h-[70vh] my-24 md:mt-24 md:mb-60 homepage-container mx-auto max-w-screen-xl w-11/12 gap-20">
+      <div className="flex flex-col items-center justify-between md:h-[70vh] my-24 md:mt-24 md:mb-60 container-fade-in mx-auto max-w-screen-xl w-11/12 gap-20">
         <div className="flex flex-col items-center gap-2">
           <h1 className="font-bold text-3xl md:text-5xl">
             Motion: Simplify Your Day
