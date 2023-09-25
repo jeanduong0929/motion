@@ -1,16 +1,13 @@
 "use client";
 import GithubButton from "@/components/auth/github-button";
 import GoogleButton from "@/components/auth/google-button";
-import Loading from "@/components/loading";
 import NavLogin from "@/components/nav/nav-login";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AuthContext } from "@/contexts/session-provider";
-import instance from "@/lib/axios-config";
 import { CommandIcon, Loader2 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import React from "react";
 
 const Login = () => {
@@ -20,22 +17,46 @@ const Login = () => {
   const [signInLoading, setSignInLoading] = React.useState<boolean>(false);
   const [githubLoading, setGithubLoading] = React.useState<boolean>(false);
   const [googleLoading, setGoogleLoading] = React.useState<boolean>(false);
+  const [pageLoading = false, setPageLoading] = React.useState<boolean>(true);
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (session) {
+      redirect("dashboard");
+    } else {
+      setPageLoading(false);
+    }
+  });
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setSignInLoading(true);
 
     try {
       const data = await signIn("credentials", {
+        redirect: false,
         email,
         password,
         callbackUrl: "http://localhost:3000/dashboard",
       });
 
       console.log("Data: ", data);
+
+      if (data && data.error) {
+        setError("Incorrect email or password");
+        return;
+      }
+
+      router.push("/dashboard");
     } catch (error: any) {
       console.log(error);
+    } finally {
+      setSignInLoading(false);
     }
   };
+
+  if (pageLoading) return null;
 
   return (
     <>

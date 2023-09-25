@@ -20,30 +20,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const Dashboard = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
-  const [pageLoading, setPageLoading] = React.useState<boolean>(false);
-  const [delayLoading, setDelayLoading] = React.useState<boolean>(true);
-  const { data: session, status } = useSession();
-  const { auth, loading } = React.useContext(AuthContext);
+  const [_, setPageLoading] = React.useState<boolean>(false);
+  const { data: session } = useSession();
+  const { auth } = React.useContext(AuthContext);
   const mySession = session ? (session as MySession) : null;
 
   React.useEffect(() => {
     sessionStorage.setItem("path", "/dashboard");
-
-    if (!session && !auth) {
-      redirect("/login");
-    }
-
-    if (session || auth) {
-      getTodos();
-    }
-
-    const timer = setTimeout(() => {
-      if (status !== "loading" && !loading && !pageLoading)
-        setDelayLoading(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [status, loading, session, auth]);
+    getTodos();
+  }, []);
 
   const getTodos = async () => {
     setPageLoading(true);
@@ -82,8 +67,6 @@ const Dashboard = () => {
       setTodos(prevTodos);
     }
   }, 1000);
-
-  if (delayLoading) return <Loading />;
 
   return (
     <>

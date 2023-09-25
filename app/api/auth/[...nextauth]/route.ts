@@ -29,16 +29,15 @@ const handler = NextAuth({
           password: string;
         };
 
-        const { data } = await instance.post("/auth/login", {
-          email,
-          password,
-        });
-
-        if (data) {
+        try {
+          const { data } = await instance.post("/auth/login", {
+            email,
+            password,
+          });
           return data;
+        } catch (error) {
+          return null;
         }
-
-        return null;
       },
     }),
   ],
@@ -148,7 +147,7 @@ const handler = NextAuth({
     },
   },
   pages: {
-    signIn: "http://localhost:3000/login",
+    signIn: "/login",
   },
 });
 
