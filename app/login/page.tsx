@@ -41,8 +41,6 @@ const Login = () => {
         callbackUrl: "http://localhost:3000/dashboard",
       });
 
-      console.log("Data: ", data);
-
       if (data && data.error) {
         setError("Incorrect email or password");
         return;

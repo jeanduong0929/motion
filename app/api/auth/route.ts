@@ -18,8 +18,6 @@ export const PATCH = async (req: NextRequest) => {
     return NextResponse.json({}, { status: 400 });
   }
 
-  console.log("Current Password :", currentPassword);
-
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(newPassword, salt);
 

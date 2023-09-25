@@ -138,9 +138,13 @@ const handler = NextAuth({
         // Decode JWT token for the id
         const { id }: any = jwt.decode(token.jwt);
 
+        // Find existing account based on user id
+        const existingAccount = await AccountEntity.findOne({ user: id });
+
         // Add jwt and id to session
         session.jwt = token.jwt;
         session.id = id;
+        session.providerType = existingAccount.providerType;
       }
 
       return session;

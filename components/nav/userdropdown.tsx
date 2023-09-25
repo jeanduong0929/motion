@@ -10,12 +10,19 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { AuthContext } from "@/contexts/session-provider";
+import MySession from "@/models/session";
 
 const UserDropdown = () => {
+  // Session
   const { data: session } = useSession();
-  const { auth, setAuth } = React.useContext(AuthContext);
+  const mySession = session ? (session as MySession) : null;
 
+  /**
+   * Get initials from session email
+   *
+   * @param email
+   * @returns string - initials
+   */
   const getInitials = (email: string) => {
     if (!email) {
       return;
@@ -24,10 +31,13 @@ const UserDropdown = () => {
     return (email[0] + email[1]).toUpperCase();
   };
 
+  /**
+   * Handle sign out
+   *
+   * @returns void
+   */
   const handleSignOut = () => {
     session && signOut();
-    setAuth(null);
-    sessionStorage.removeItem("auth");
   };
 
   return (
@@ -37,14 +47,12 @@ const UserDropdown = () => {
           <Avatar>
             <AvatarImage src={session?.user?.image as string} />
             <AvatarFallback>
-              {getInitials(auth ? auth.email : "")}
+              {getInitials(mySession?.user?.email as string)}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>
-            {session ? session?.user?.email : auth?.email}
-          </DropdownMenuLabel>
+          <DropdownMenuLabel>{session?.user?.email}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <Link href={"/dashboard"}>
             <DropdownMenuItem>Dashboard</DropdownMenuItem>

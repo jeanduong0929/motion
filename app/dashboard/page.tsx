@@ -1,8 +1,6 @@
 "use client";
-import Loading from "@/components/loading";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { redirect } from "next/navigation";
 import { AuthContext } from "@/contexts/session-provider";
 import Sidebar from "@/components/sidebar";
 import { Button } from "@/components/ui/button";

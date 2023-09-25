@@ -1,44 +1,66 @@
 "use client";
-import Loading from "@/components/loading";
+import FormButton from "@/components/form/form-button";
+import FormInput from "@/components/form/form-input";
 import Navbar from "@/components/nav/navbar";
 import Sidebar from "@/components/sidebar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { AuthContext } from "@/contexts/session-provider";
 import instance from "@/lib/axios-config";
-import { Loader2 } from "lucide-react";
+import MySession from "@/models/session";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import React from "react";
 
 const Profile = () => {
+  return (
+    <>
+      <Navbar />
+      <div className="flex py-10 profile-container mx-auto max-w-screen-xl w-11/12">
+        <Sidebar />
+        <div className="flex flex-col items-start gap-5 w-full pl-10 pr-20">
+          <div className="flex flex-col items-start gap-2">
+            <h1 className="text-4xl font-bold">Profile</h1>
+            <h3 className="text-slate-500 text-lg">
+              Manage your profile settings
+            </h3>
+          </div>
+
+          <ChangePasswordForm />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Profile;
+
+/* -------------------------------------------------------------------------- */
+
+const ChangePasswordForm = () => {
+  // Form state
   const [currentPassword, setCurrentPassword] = React.useState<string>("");
   const [newPassword, setNewPassword] = React.useState<string>("");
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
-  const [error, setError] = React.useState<string>("");
   const [newPassowrdError, setNewPasswordError] = React.useState<string>("");
   const [confirmPasswordError, setConfirmPasswordError] =
     React.useState<string>("");
   const [newPasswordLoading, setNewPasswordLoading] =
     React.useState<boolean>(false);
-  const [delayLoading, setDelayLoading] = React.useState<boolean>(true);
-  const { data: session, status } = useSession();
-  const { auth, loading } = React.useContext(AuthContext);
+
+  // Error state
+  const [error, setError] = React.useState<string>("");
+
+  // Session
+  const { data: session } = useSession();
+  const mySession = session ? (session as MySession) : null;
+
+  // Misc
   const { toast } = useToast();
 
-  React.useEffect(() => {
-    if (!session && !auth) {
-      redirect("/login");
-    }
-
-    const timer = setTimeout(() => {
-      if (status !== "loading" && !loading) setDelayLoading(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [status, loading, auth, session]);
-
+  /**
+   * The purpose of this function is to handle the new password
+   *
+   * @param e - The change event
+   * @returns void
+   */
   const handleNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
 
@@ -53,6 +75,12 @@ const Profile = () => {
     }
   };
 
+  /**
+   * The purpose of this function is to handle the confirm password
+   *
+   * @param e - The change event
+   * @returns void
+   */
   const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(e.target.value);
 
@@ -63,13 +91,31 @@ const Profile = () => {
     }
   };
 
+  /**
+   * The purpose of this function is to validate the password
+   *
+   * @param password - The password to validate
+   * @returns boolean - Whether the password is valid or not
+   */
+  const isValidPassword = (password: string) => {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+      password,
+    );
+  };
+
+  /**
+   * The purpose of this function is to handle saving the new password
+   *
+   * @param e - The submit event
+   * @returns void
+   */
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setNewPasswordLoading(true);
 
     try {
       await instance.patch("/auth", {
-        email: session ? session!.user!.email : auth ? auth!.email : "",
+        email: session!.user!.email,
         currentPassword,
         newPassword,
       });
@@ -92,99 +138,64 @@ const Profile = () => {
     }
   };
 
-  const isValidPassword = (password: string) => {
-    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-      password,
-    );
-  };
+  if (mySession) {
+    return mySession.providerType !== "credentials" ? (
+      <div className="flex flex-col items-start gap-5 border px-5 py-4 w-full">
+        {/** Header */}
+        <div className="flex flex-col items-start">
+          <h2 className="text-xl font-bold">Change password</h2>
 
-  if (delayLoading) return <Loading />;
-
-  return (
-    <>
-      <Navbar />
-      <div className="flex py-10 profile-container mx-auto max-w-screen-xl">
-        <Sidebar />
-        <div className="flex flex-col items-start gap-5 w-full pl-10 pr-20">
-          <div className="flex flex-col items-start gap-2">
-            <h1 className="text-4xl font-bold">Profile</h1>
-            <h3 className="text-slate-500 text-lg">
-              Manage your profile settings
-            </h3>
-          </div>
-
-          {session ? (
-            <div className="flex flex-col items-start gap-5 border px-5 py-4 w-full">
-              <div className="flex flex-col items-start">
-                <h2 className="text-xl font-bold">Change password</h2>
-
-                <p className="text-slate-500 text-sm">
-                  Change password via your auth provider
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col items-start gap-5 border px-5 py-4 w-full">
-              <div className="flex flex-col items-start">
-                <h2 className="text-xl font-bold">Change password</h2>
-                <p className="text-slate-500 text-sm">
-                  Please enter your new password
-                </p>
-              </div>
-
-              <form
-                className="flex flex-col items-start gap-4 w-[400px]"
-                onSubmit={handleForm}
-              >
-                <div className="flex flex-col items-start gap-1 w-full">
-                  <Input
-                    placeholder="Current password"
-                    type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                  />
-                  {error && <p className="text-red-500 text-sm">{error}</p>}
-                </div>
-
-                <div className="flex flex-col items-start gap-1 w-full">
-                  <Input
-                    placeholder="New password"
-                    type="password"
-                    value={newPassword}
-                    onChange={handleNewPassword}
-                  />
-                  {newPassowrdError && (
-                    <p className="text-red-500 text-sm">{newPassowrdError}</p>
-                  )}
-                </div>
-
-                <div className="flex flex-col items-start gap-1 w-full">
-                  <Input
-                    placeholder="Confirm password"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={handleConfirmPassword}
-                  />
-                  {confirmPasswordError && (
-                    <p className="text-red-500 text-sm">
-                      {confirmPasswordError}
-                    </p>
-                  )}
-                </div>
-
-                <Button type="submit" disabled={newPasswordLoading}>
-                  {newPasswordLoading && (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  )}
-                  Save
-                </Button>
-              </form>
-            </div>
-          )}
+          <p className="text-slate-500 text-sm">
+            Change password via your auth provider
+          </p>
         </div>
       </div>
-    </>
-  );
-};
+    ) : (
+      <div className="flex flex-col items-start gap-5 border px-5 py-4 w-full">
+        <div className="flex flex-col items-start">
+          <h2 className="text-xl font-bold">Change password</h2>
+          <p className="text-slate-500 text-sm">
+            Please enter your new password
+          </p>
+        </div>
 
-export default Profile;
+        <form
+          className="flex flex-col items-start gap-4 w-[400px]"
+          onSubmit={handleForm}
+        >
+          {/** Current password */}
+          <FormInput
+            placeholder={"Current password"}
+            type={"password"}
+            value={currentPassword}
+            handleValue={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setCurrentPassword(e.target.value)
+            }
+            error={error}
+          />
+
+          {/** New password */}
+          <FormInput
+            placeholder={"New password"}
+            type={"password"}
+            value={newPassword}
+            handleValue={handleNewPassword}
+            error={newPassowrdError}
+          />
+
+          {/** Confirm password */}
+          <FormInput
+            placeholder={"Confirm password"}
+            type={"password"}
+            value={confirmPassword}
+            handleValue={handleConfirmPassword}
+            error={confirmPasswordError}
+          />
+
+          {/** Submit button */}
+          <FormButton label={"save"} loading={newPasswordLoading} />
+        </form>
+      </div>
+    );
+  }
+};
