@@ -34,6 +34,9 @@ const Register = () => {
   // Custom Hook
   const { toast } = useToast();
 
+  // Next.js Router
+  const router = useRouter();
+
   /* ############################## METHODS ############################## */
 
   /**
@@ -93,7 +96,8 @@ const Register = () => {
         description: "We've created your account for you.",
         className: "bg-slate-800 text-white",
       });
-      useRouter().push("/login");
+
+      router.push("/login");
     } catch (error: any) {
       if (error) {
         if (error.response.status === 409) {
