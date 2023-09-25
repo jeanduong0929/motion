@@ -1,50 +1,83 @@
 "use client";
-import { useSession } from "next-auth/react";
+
+// External Libraries and Dependencies
 import React from "react";
-import { AuthContext } from "@/contexts/session-provider";
-import Sidebar from "@/components/sidebar";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import instance from "@/lib/axios-config";
-import MySession from "@/models/session";
 import Link from "next/link";
-import Todo from "@/models/todo";
-import Navbar from "@/components/nav/navbar";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import TodoItem from "@/components/todo/todo-item";
 import debounce from "lodash.debounce";
+
+// Next.js and Next-Auth
+import { useSession } from "next-auth/react";
+
+// Custom Components
+import Sidebar from "@/components/sidebar";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Navbar from "@/components/nav/navbar";
+import TodoItem from "@/components/todo/todo-item";
+
+// Models and Data
+import MySession from "@/models/session";
+import Todo from "@/models/todo";
+
+// API and Network
+import instance from "@/lib/axios-config";
+
+// Icons and Graphics
+import { PlusIcon } from "lucide-react";
 
 const Dashboard = () => {
+  // Todo states
   const [todos, setTodos] = React.useState<Todo[]>([]);
-  const [_, setPageLoading] = React.useState<boolean>(false);
+
+  // Session
   const { data: session } = useSession();
-  const { auth } = React.useContext(AuthContext);
   const mySession = session ? (session as MySession) : null;
 
+  /* ############################## METHODS ############################## */
+
+  /**
+   * The purpose of this hook is to get the todos from the database
+   * when the component mounts
+   *
+   * @returns {void}
+   */
   React.useEffect(() => {
     sessionStorage.setItem("path", "/dashboard");
     getTodos();
   }, []);
 
-  const getTodos = async () => {
-    setPageLoading(true);
+  /**
+   * The purpose of this function is to get the todos from the database
+   *
+   * @returns {Promise<void>}
+   */
+  const getTodos = async (): Promise<void> => {
     try {
-      const { data } = await instance.get(
-        `/todo/user/${mySession ? mySession!.id : auth ? auth!.id : ""}`,
-      );
+      if (mySession) {
+        // Get the todos from the response data
+        const { data } = await instance.get(`/todo/user/${mySession!.id}`);
 
-      // Get the todos from incompleted to completed
-      setTodos(data);
+        // Set the todos
+        setTodos(data);
+      }
     } catch (error: any) {
       console.log(error);
-    } finally {
-      setPageLoading(false);
     }
   };
 
-  const moveTodo = async (fromIndex: number, toIndex: number) => {
+  /**
+   * The purpose of this function is to move a todo from one index to another
+   *
+   * @param {number} fromIndex - The index of the todo to move
+   * @param {number} toIndex - The index to move the todo to
+   * @returns {Promise<void>}
+   */
+  const moveTodo = async (
+    fromIndex: number,
+    toIndex: number,
+  ): Promise<void> => {
     setTodos((prevTodos) => {
       const updatedTodos = [...prevTodos];
       const [movedTodo] = updatedTodos.splice(fromIndex, 1);
@@ -65,6 +98,8 @@ const Dashboard = () => {
       setTodos(prevTodos);
     }
   }, 1000);
+
+  /* ############################## RENDER ############################## */
 
   return (
     <>

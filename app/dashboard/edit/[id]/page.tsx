@@ -1,47 +1,30 @@
 "use client";
-import Loading from "@/components/loading";
 import NavCreate from "@/components/nav/nav-create";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { AuthContext } from "@/contexts/session-provider";
 import instance from "@/lib/axios-config";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const EditTodo = ({ params }: { params: { id: string } }) => {
   const [title, setTitle] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-  const [todoEditLoading, setTodoEditLoading] = React.useState(false);
-  const [delayLoading, setDelayLoading] = React.useState(true);
   const { id } = params;
-  const { data: session, status } = useSession();
-  const { auth, loading } = React.useContext(AuthContext);
+  const { data: session } = useSession();
   const { toast } = useToast();
   const router = useRouter();
 
   React.useEffect(() => {
-    if (!session && !auth) {
-      redirect("/login");
-    }
-
-    const timer = setTimeout(() => {
-      if (status !== "loading" && !loading && !todoEditLoading)
-        setDelayLoading(false);
-    }, 300);
-
-    if (session || auth) {
+    if (session) {
       getTodoById();
     }
-
-    return () => clearTimeout(timer);
-  }, [status, loading, session, auth]);
+  }, [session]);
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
       await instance.patch("/todo/edit", {
         id,
@@ -68,18 +51,13 @@ const EditTodo = ({ params }: { params: { id: string } }) => {
   };
 
   const getTodoById = async () => {
-    setTodoEditLoading(true);
     try {
       const { data } = await instance.get(`/todo/${id}`);
       setTitle(data.title);
     } catch (error: any) {
       console.log(error);
-    } finally {
-      setTodoEditLoading(false);
     }
   };
-
-  if (delayLoading) return <Loading />;
 
   return (
     <>

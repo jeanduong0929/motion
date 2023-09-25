@@ -1,35 +1,66 @@
 "use client";
-import GithubButton from "@/components/auth/github-button";
-import GoogleButton from "@/components/auth/google-button";
-import NavLogin from "@/components/nav/nav-login";
+
+// React and Next.js
+import React from "react";
+import { useRouter, redirect } from "next/navigation";
+import Link from "next/link";
+
+// Next-Auth
+import { signIn, useSession } from "next-auth/react";
+
+// Custom UI Components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CommandIcon, Loader2 } from "lucide-react";
-import { signIn, useSession } from "next-auth/react";
-import Link from "next/link";
-import { useRouter, redirect } from "next/navigation";
-import React from "react";
+
+// Authentication Components
+import GithubButton from "@/components/auth/github-button";
+import GoogleButton from "@/components/auth/google-button";
+import NavLogin from "@/components/nav/nav-login";
 
 const Login = () => {
+  // Form states
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+
+  // Error states
   const [error, setError] = React.useState<string>("");
+
+  // Loading states
   const [signInLoading, setSignInLoading] = React.useState<boolean>(false);
   const [githubLoading, setGithubLoading] = React.useState<boolean>(false);
   const [googleLoading, setGoogleLoading] = React.useState<boolean>(false);
-  const [pageLoading = false, setPageLoading] = React.useState<boolean>(true);
+
+  // Session
   const { data: session } = useSession();
+
+  // Router
   const router = useRouter();
 
+  /* ############################# METHODS ############################# */
+
+  /**
+   * The purpose of this hook is to redirect the user to the dashboard
+   * if they are already signed in
+   *
+   * @returns {void}
+   */
   React.useEffect(() => {
     if (session) {
       redirect("dashboard");
-    } else {
-      setPageLoading(false);
     }
   });
 
-  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  /**
+   * The purpose of this function is to handle the login form submission
+   * and sign the user in
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - The form event
+   * @returns {Promise<void>}
+   */
+  const handleForm = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
     setSignInLoading(true);
 
@@ -54,7 +85,7 @@ const Login = () => {
     }
   };
 
-  if (pageLoading) return null;
+  /* ############################# RENDER ############################# */
 
   return (
     <>

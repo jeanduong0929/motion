@@ -6,14 +6,12 @@ import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
 import UserDropdown from "./userdropdown";
 import Loading from "../loading";
-import { AuthContext } from "@/contexts/session-provider";
 import { ModeToggle } from "./theme-toggle";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
-  const { auth, loading } = React.useContext(AuthContext);
 
-  if (status === "loading" || loading) return <Loading />;
+  if (status === "loading") return <Loading />;
 
   return (
     <>
@@ -26,7 +24,7 @@ const Navbar = () => {
 
           <div className="flex items-center gap-10">
             <ModeToggle />
-            {session || auth ? (
+            {session ? (
               <UserDropdown />
             ) : (
               <Link href={"/login"}>

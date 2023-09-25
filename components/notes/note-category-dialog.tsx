@@ -11,7 +11,6 @@ import { Button } from "../ui/button";
 import instance from "@/lib/axios-config";
 import { Loader2 } from "lucide-react";
 import { Session } from "next-auth";
-import Auth from "@/models/auth";
 import MySession from "@/models/session";
 import { useToast } from "../ui/use-toast";
 
@@ -19,13 +18,11 @@ interface NoteCategoryDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   session: Session | null;
-  auth: Auth | null;
 }
 const NoteCategoryDialog = ({
   open,
   setOpen,
   session,
-  auth,
 }: NoteCategoryDialogProps) => {
   const [name, setName] = React.useState<string>("");
   const [nameError, setNameError] = React.useState<string>("");
@@ -44,7 +41,7 @@ const NoteCategoryDialog = ({
     try {
       await instance.post("/notes/category", {
         name,
-        user: mySession ? mySession!.id : auth!.id,
+        user: mySession!.id,
       });
       setOpen(false);
 

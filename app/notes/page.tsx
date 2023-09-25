@@ -1,36 +1,34 @@
 "use client";
-import Loading from "@/components/loading";
 import Navbar from "@/components/nav/navbar";
 import NoteCategoryDialog from "@/components/notes/note-category-dialog";
 import Sidebar from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AuthContext } from "@/contexts/session-provider";
 import instance from "@/lib/axios-config";
 import NoteCategory from "@/models/note-category";
 import MySession from "@/models/session";
 import { PlusIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import React from "react";
 
 const Notes = () => {
+  // Dialog state
   const [open, setOpen] = React.useState<boolean>(false);
-  const [delayLoading, setDelayLoading] = React.useState<boolean>(true);
-  const [notesLoading, setNotesLoading] = React.useState<boolean>(false);
+
+  // Loading states
+  const [_, setNotesLoading] = React.useState<boolean>(false);
   const [noteCategories, setNoteCategories] = React.useState<NoteCategory[]>(
     [],
   );
-  const { data: session, status } = useSession();
-  const { auth, loading } = React.useContext(AuthContext);
+
+  // Session
+  const { data: session } = useSession();
   const mySession = session ? (session as MySession) : null;
 
   const getNotes = async () => {
     setNotesLoading(true);
     try {
-      const { data } = await instance.get(
-        `notes/category/${mySession ? mySession!.id : auth!.id}`,
-      );
+      const { data } = await instance.get(`notes/category/${mySession!.id}`);
       setNoteCategories(data);
     } catch (error: any) {
       console.log(error);
@@ -40,23 +38,9 @@ const Notes = () => {
   };
 
   React.useEffect(() => {
-    if (!session && !auth) {
-      redirect("/login");
-    }
-
     sessionStorage.setItem("path", "/notes");
-
     getNotes();
-
-    const timer = setTimeout(() => {
-      if (status !== "loading" && !loading && !notesLoading)
-        setDelayLoading(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
   }, []);
-
-  if (delayLoading) return <Loading />;
 
   return (
     <>
@@ -94,12 +78,7 @@ const Notes = () => {
         </div>
       </div>
 
-      <NoteCategoryDialog
-        open={open}
-        setOpen={setOpen}
-        session={session}
-        auth={auth}
-      />
+      <NoteCategoryDialog open={open} setOpen={setOpen} session={session} />
     </>
   );
 };

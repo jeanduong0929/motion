@@ -8,7 +8,6 @@ export const GET = async (
 ) => {
   const { id } = context.params;
   await connectDB();
-  console.log("Id: ", id);
   const notes = await NoteCategoryEntity.find({ user: id }).exec();
   return NextResponse.json(notes, { status: 200 });
 };

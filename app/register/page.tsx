@@ -1,22 +1,28 @@
 "use client";
+
+// React and Next.js
+import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+// External Libraries and Dependencies
+import instance from "@/lib/axios-config";
+
+// Custom UI Components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CommandIcon, Loader2 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import React from "react";
-import { redirect } from "next/navigation";
-import Loading from "@/components/loading";
-import instance from "@/lib/axios-config";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { AuthContext } from "@/contexts/session-provider";
-import NavRegister from "@/components/nav/nav-register";
+
+// Authentication Components
 import GithubButton from "@/components/auth/github-button";
 import GoogleButton from "@/components/auth/google-button";
 
+// Navigation Components
+import NavRegister from "@/components/nav/nav-register";
+
 const Register = () => {
-  const router = useRouter();
+  // State Variables
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [emailError, setEmailError] = React.useState<string>("");
@@ -24,11 +30,19 @@ const Register = () => {
   const [signUploading, setSignUpLoading] = React.useState<boolean>(false);
   const [githubLoading, setGithubLoading] = React.useState<boolean>(false);
   const [googleLoading, setGoogleLoading] = React.useState<boolean>(false);
-  const { data: session, status } = useSession();
-  const { auth, loading } = React.useContext(AuthContext);
+
+  // Custom Hook
   const { toast } = useToast();
 
-  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /* ############################## METHODS ############################## */
+
+  /**
+   * The purpose of this method is to handle the email input and validate it
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event
+   * @returns {void}
+   */
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setEmail(e.target.value);
 
     if (!e.target.value.trim()) {
@@ -40,7 +54,13 @@ const Register = () => {
     }
   };
 
-  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   * The purpose of this method is to handle the password input and validate it
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event
+   * @returns {Promise<void>}
+   */
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setPassword(e.target.value);
 
     if (!e.target.value.trim()) {
@@ -52,7 +72,15 @@ const Register = () => {
     }
   };
 
-  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  /**
+   * The purpose of this method is to handle the form submission
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - The form event
+   * @returns {Promise<void>}
+   */
+  const handleForm = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
     setSignUpLoading(true);
 
@@ -65,7 +93,7 @@ const Register = () => {
         description: "We've created your account for you.",
         className: "bg-slate-800 text-white",
       });
-      router.push("/login");
+      useRouter().push("/login");
     } catch (error: any) {
       if (error) {
         if (error.response.status === 409) {
@@ -87,11 +115,7 @@ const Register = () => {
     );
   };
 
-  if (status === "loading" || loading) return <Loading />;
-
-  if (session || auth) {
-    redirect("/dashboard");
-  }
+  /* ############################## RENDER ############################## */
 
   return (
     <>
