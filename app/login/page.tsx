@@ -69,7 +69,6 @@ const Login = () => {
         redirect: false,
         email,
         password,
-        callbackUrl: "http://localhost:3000/dashboard",
       });
 
       if (data && data.error) {
