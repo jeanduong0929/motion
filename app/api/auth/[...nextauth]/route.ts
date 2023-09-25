@@ -5,6 +5,8 @@ import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import jwt from "jsonwebtoken";
+import CredentialsProvider from "next-auth/providers/credentials";
+import instance from "@/lib/axios-config";
 
 const handler = NextAuth({
   providers: [
@@ -15,6 +17,29 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {},
+      async authorize(
+        credentials: Record<never, string> | undefined,
+      ): Promise<null> {
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
+
+        const { data } = await instance.post("/auth/login", {
+          email,
+          password,
+        });
+
+        if (data) {
+          return data;
+        }
+
+        return null;
+      },
     }),
   ],
   callbacks: {
@@ -27,8 +52,20 @@ const handler = NextAuth({
       account: any;
       profile?: any;
     }) {
-      let providerId = account.provider === "github" ? profile.id : profile.sub;
-      let providerType = account.provider;
+      let providerId,
+        providerType = "";
+
+      if (account.provider === "github") {
+        providerId = profile.id;
+        providerType = "github";
+      } else if (account.provider === "google") {
+        providerId = profile.sub;
+        providerType = "google";
+      } else {
+        providerId = user.id;
+        providerType = "credentials";
+      }
+
       const { email } = user;
 
       await connectDB();
@@ -109,6 +146,9 @@ const handler = NextAuth({
 
       return session;
     },
+  },
+  pages: {
+    signIn: "http://localhost:3000/login",
   },
 });
 

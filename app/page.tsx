@@ -56,7 +56,7 @@ export default function Home() {
           <h2 className="text-2xl text-slate-500">
             Minimal design, maximum productivity
           </h2>
-          <Link href={"/login"}>
+          <Link href={"/dashboard"}>
             <Button>Get Started</Button>
           </Link>
         </div>

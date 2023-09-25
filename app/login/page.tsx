@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { AuthContext } from "@/contexts/session-provider";
 import instance from "@/lib/axios-config";
 import { CommandIcon, Loader2 } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -20,50 +20,22 @@ const Login = () => {
   const [signInLoading, setSignInLoading] = React.useState<boolean>(false);
   const [githubLoading, setGithubLoading] = React.useState<boolean>(false);
   const [googleLoading, setGoogleLoading] = React.useState<boolean>(false);
-  const [delayLoading, setDelayLoading] = React.useState<boolean>(true);
-  const { data: session, status } = useSession();
-  const { _, setAuth, loading } = React.useContext(AuthContext);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      if (status !== "loading" && !loading) setDelayLoading(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  React.useEffect(() => {
-    const path = sessionStorage.getItem("path");
-
-    if (path) {
-      redirect(path);
-    }
-    redirect("/dashboard");
-  }, []);
 
   const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSignInLoading(true);
+
     try {
-      const { data } = await instance.post("/auth/login", {
+      const data = await signIn("credentials", {
         email,
         password,
+        callbackUrl: "http://localhost:3000/dashboard",
       });
 
-      setAuth(data);
-      sessionStorage.setItem("auth", JSON.stringify(data));
-
-      redirect("/dashboard");
+      console.log("Data: ", data);
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        setError("Email or password is incorrect");
-      }
-    } finally {
-      setSignInLoading(false);
+      console.log(error);
     }
   };
-
-  if (delayLoading) return <Loading />;
 
   return (
     <>
