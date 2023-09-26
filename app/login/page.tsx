@@ -1,24 +1,20 @@
 "use client";
 
-// React and Next.js
 import React from "react";
 import { useRouter, redirect } from "next/navigation";
 import Link from "next/link";
-
-// Next-Auth
 import { signIn, useSession } from "next-auth/react";
-
-// Custom UI Components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CommandIcon, Loader2 } from "lucide-react";
-
-// Authentication Components
+import { ChevronLeft, CommandIcon, Loader2 } from "lucide-react";
 import GithubButton from "@/components/auth/github-button";
 import GoogleButton from "@/components/auth/google-button";
-import NavLogin from "@/components/nav/nav-login";
 
-const Login = () => {
+/**
+ * Component for rendering the login page.
+ * @returns {JSX.Element} - The rendered component.
+ */
+const Login = (): JSX.Element => {
   // Form states
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
@@ -28,22 +24,15 @@ const Login = () => {
 
   // Loading states
   const [signInLoading, setSignInLoading] = React.useState<boolean>(false);
-  const [githubLoading, setGithubLoading] = React.useState<boolean>(false);
-  const [googleLoading, setGoogleLoading] = React.useState<boolean>(false);
 
   // Session
   const { data: session } = useSession();
 
-  // Router
+  // Hooks
   const router = useRouter();
 
-  /* ############################# METHODS ############################# */
-
   /**
-   * The purpose of this hook is to redirect the user to the dashboard
-   * if they are already signed in
-   *
-   * @returns {void}
+   * Redirects to dashboard if session exists.
    */
   React.useEffect(() => {
     if (session) {
@@ -52,11 +41,9 @@ const Login = () => {
   });
 
   /**
-   * The purpose of this function is to handle the login form submission
-   * and sign the user in
-   *
-   * @param {React.FormEvent<HTMLFormElement>} e - The form event
-   * @returns {Promise<void>}
+   * Handles the form submission.
+   * @param {React.FormEvent<HTMLFormElement>} e - The form event.
+   * @returns {Promise<void>} - A promise.
    */
   const handleForm = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -83,8 +70,6 @@ const Login = () => {
       setSignInLoading(false);
     }
   };
-
-  /* ############################# RENDER ############################# */
 
   return (
     <>
@@ -121,22 +106,57 @@ const Login = () => {
             {signInLoading && <Loader2 className="mr-2 animate-spin h-4 w-4" />}
             Sign In with Email
           </Button>
+
+          <LoginFooter />
         </form>
-
-        <div className="flex items-center gap-2 w-full">
-          <hr className="w-full" />
-          <p>Or</p>
-          <hr className="w-full" />
-        </div>
-
-        <GithubButton loading={githubLoading} setLoading={setGithubLoading} />
-        <GoogleButton loading={googleLoading} setLoading={setGoogleLoading} />
-        <Link href={"/register"}>
-          <p className="underline underline-offset-4">
-            Don&apos;t have an account? Sign Up
-          </p>
-        </Link>
       </div>
+    </>
+  );
+};
+
+/**
+ * Component for rendering the login footer.
+ * @returns {JSX.Element} - The rendered component.
+ */
+const LoginFooter = (): JSX.Element => {
+  // Loading states
+  const [githubLoading, setGithubLoading] = React.useState<boolean>(false);
+  const [googleLoading, setGoogleLoading] = React.useState<boolean>(false);
+
+  return (
+    <>
+      <div className="flex items-center gap-2 w-full">
+        <hr className="w-full" />
+        <p>OR</p>
+        <hr className="w-full" />
+      </div>
+
+      <GithubButton loading={githubLoading} setLoading={setGithubLoading} />
+      <GoogleButton loading={googleLoading} setLoading={setGoogleLoading} />
+      <Link href={"/register"}>
+        <p className="underline underline-offset-4">
+          Don&apos;t have an account? Sign Up
+        </p>
+      </Link>
+    </>
+  );
+};
+
+/**
+ * Component for rendering the login navigation.
+ * @returns {JSX.Element} - The rendered component.
+ */
+const NavLogin = (): JSX.Element => {
+  return (
+    <>
+      <nav className="flex items-center px-20 py-10">
+        <Link href={"/"}>
+          <Button variant={"ghost"} className="text-md">
+            <ChevronLeft size={20} className="mr-2" />
+            Back
+          </Button>
+        </Link>
+      </nav>
     </>
   );
 };

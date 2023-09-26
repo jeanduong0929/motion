@@ -24,6 +24,7 @@ const FormInput = ({
           type={type}
           value={value}
           onChange={handleValue}
+          onBlur={handleValue}
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
       </div>

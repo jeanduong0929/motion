@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import Navbar from "@/components/nav/navbar";
 
-export default function Home() {
+const Home = () => {
   const cards = [
     {
       id: "1",
@@ -96,4 +96,6 @@ export default function Home() {
       </div>
     </>
   );
-}
+};
+
+export default Home;

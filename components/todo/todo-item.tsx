@@ -77,12 +77,10 @@ const TodoItem = ({
         className="flex items-center justify-between border px-5 py-4"
       >
         {loadingTodoId === todo._id ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2 className="h-4 w-4 animate-spin container-fade-in" />
         ) : (
           <div
-            className={`todo-item-container ${
-              todo.completed && "line-through"
-            }`}
+            className={`container-fade-in ${todo.completed && "line-through"}`}
           >
             <h1 className={"font-bold"}>{todo.title}</h1>
             <TodoDeleteDialog

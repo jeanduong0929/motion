@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
  * Handles PATCH requests to update user passwords.
  * @async
  * @param {NextRequest} req - The Next.js request object.
- * @returns {NextResponse} - A response object with the status of the operation.
+ * @returns {Promise<NextResponse>} - A response object with the status of the operation.
  */
 export const PATCH = async (req: NextRequest): Promise<NextResponse> => {
   try {
