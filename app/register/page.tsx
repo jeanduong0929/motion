@@ -46,6 +46,7 @@ const RegisterForm = (): JSX.Element => {
 
   // Hooks
   const { toast } = useToast();
+  const router = useRouter();
 
   /**
    * Handles the email input.
@@ -101,7 +102,7 @@ const RegisterForm = (): JSX.Element => {
         description: "We've created your account for you.",
         className: "bg-slate-800 text-white",
       });
-      useRouter().push("/login");
+      router.push("/login");
     } catch (error: any) {
       console.error(error);
       if (error.response && error.response.status === 409) {
