@@ -1,5 +1,11 @@
+import Loading from "@/components/loading";
+
 const DashboardPageLoader = () => {
-  return null;
+  return (
+    <>
+      <Loading />
+    </>
+  );
 };
 
 export default DashboardPageLoader;
