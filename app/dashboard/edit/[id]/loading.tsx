@@ -1,6 +1,7 @@
 import Loading from "@/components/loading";
+import React from "react";
 
-const DashboardPageLoader = () => {
+const TodoEditPageLoader = () => {
   return (
     <>
       <Loading />
@@ -8,4 +9,4 @@ const DashboardPageLoader = () => {
   );
 };
 
-export default DashboardPageLoader;
+export default TodoEditPageLoader;

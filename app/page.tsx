@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import Navbar from "@/components/nav/navbar";
 
-export default function Home() {
+const Home = () => {
   const cards = [
     {
       id: "1",
@@ -47,51 +47,55 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
-      <div className="flex flex-col items-center justify-between md:h-[70vh] my-24 md:mt-24 md:mb-60 container-fade-in mx-auto max-w-screen-xl w-11/12 gap-20">
-        <div className="flex flex-col items-center gap-2">
-          <h1 className="font-bold text-3xl md:text-5xl">
-            Motion: Simplify Your Day
-          </h1>
-          <h2 className="text-2xl text-slate-500">
-            Minimal design, maximum productivity
-          </h2>
-          <Link href={"/dashboard"}>
-            <Button>Get Started</Button>
-          </Link>
-        </div>
-        <div className="flex flex-col items-center gap-5">
-          <h1 className="font-bold text-3xl md:text-5xl">Features</h1>
-          <p className="xl:w-[40vw] lg:w-[70vw] text-center text-slate-500 text-md md:text-lg max-w-screen-xl">
-            Motion offers quick task entry, one-click completion, and easy
-            prioritization in a clean, user-friendly interface. With dark mode
-            and instant sync, it&apos;s minimalism for maximum productivity.
-          </p>
-          <div className="grid grid-cols-1 gap-5 | md:grid-cols-3 max-w-screen-xl">
-            {cards.map((card) => (
-              <Card key={card.id}>
-                <CardHeader>
-                  <CardTitle className="flex flex-col items-start gap-2">
-                    {card.svg}
-                    {card.title}
-                  </CardTitle>
-                  <CardDescription>{card.description}</CardDescription>
-                </CardHeader>
-              </Card>
-            ))}
+      <div className="container-fade-in">
+        <Navbar />
+        <div className="flex flex-col items-center justify-between md:h-[70vh] my-24 md:mt-24 md:mb-60 mx-auto max-w-screen-xl w-11/12 gap-20">
+          <div className="flex flex-col items-center gap-2">
+            <h1 className="font-bold text-3xl md:text-5xl">
+              Motion: Simplify Your Day
+            </h1>
+            <h2 className="text-2xl text-slate-500">
+              Minimal design, maximum productivity
+            </h2>
+            <Link href={"/dashboard"}>
+              <Button>Get Started</Button>
+            </Link>
           </div>
-        </div>
+          <div className="flex flex-col items-center gap-5">
+            <h1 className="font-bold text-3xl md:text-5xl">Features</h1>
+            <p className="xl:w-[40vw] lg:w-[70vw] text-center text-slate-500 text-md md:text-lg max-w-screen-xl">
+              Motion offers quick task entry, one-click completion, and easy
+              prioritization in a clean, user-friendly interface. With dark mode
+              and instant sync, it&apos;s minimalism for maximum productivity.
+            </p>
+            <div className="grid grid-cols-1 gap-5 | md:grid-cols-3 max-w-screen-xl">
+              {cards.map((card) => (
+                <Card key={card.id}>
+                  <CardHeader>
+                    <CardTitle className="flex flex-col items-start gap-2">
+                      {card.svg}
+                      {card.title}
+                    </CardTitle>
+                    <CardDescription>{card.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          </div>
 
-        <div className="w-[70vw] text-center flex flex-col items-center gap-3">
-          <h1 className="font-bold text-3xl md:text-5xl">
-            Proudly Open Source
-          </h1>
-          <p className="text-slate-500 text-md md:text-lg">
-            Thank you for choosing Motion. Simplify your life, amplify your
-            productivity, and make every moment count. Get in Motion today.
-          </p>
+          <div className="w-[70vw] text-center flex flex-col items-center gap-3">
+            <h1 className="font-bold text-3xl md:text-5xl">
+              Proudly Open Source
+            </h1>
+            <p className="text-slate-500 text-md md:text-lg">
+              Thank you for choosing Motion. Simplify your life, amplify your
+              productivity, and make every moment count. Get in Motion today.
+            </p>
+          </div>
         </div>
       </div>
     </>
   );
-}
+};
+
+export default Home;
