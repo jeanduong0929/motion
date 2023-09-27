@@ -216,7 +216,7 @@ const RegisterFooter = (): JSX.Element => {
 const NavRegister = (): JSX.Element => {
   return (
     <>
-      <nav className="absolute flex items-center top-0 right-0  px-20 py-10">
+      <nav className="absolute flex items-center top-0 right-0  px-20 py-5">
         <Link href={"/login"} className="px-5 py-2 rounded-md">
           <Button variant={"ghost"}> Login</Button>
         </Link>

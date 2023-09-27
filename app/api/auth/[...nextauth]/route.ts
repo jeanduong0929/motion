@@ -126,9 +126,12 @@ function assignProviderDetails(user: any, account: any, profile: any): any {
   } else if (account.provider === "google") {
     providerId = profile.sub;
     providerType = "google";
-  } else {
+  } else if (account.provider !== "github" && account.provider !== "google") {
     providerId = user.id;
     providerType = "credentials";
+  } else {
+    providerId = "";
+    providerType = "";
   }
 
   return { providerId, providerType };

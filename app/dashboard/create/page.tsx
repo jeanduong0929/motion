@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 
 // Custom UI Components
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 // Models and Data
@@ -16,9 +16,13 @@ import MySession from "@/models/session";
 import instance from "@/lib/axios-config";
 
 // Custom Components
-import NavCreate from "@/components/nav/nav-create";
+import Link from "next/link";
 
-const TodoCreate = () => {
+/**
+ * Component for creating a new Todo.
+ * @returns {JSX.Element} - The rendered component.
+ */
+const TodoCreate = (): JSX.Element => {
   // State Variables
   const [title, setTitle] = React.useState<string>("");
   const [buttonLoading, setButtonLoading] = React.useState<boolean>(false);
@@ -30,12 +34,9 @@ const TodoCreate = () => {
   // Custom Hook
   const { toast } = useToast();
 
-  /* ############################# METHODS ############################# */
-
   /**
-   * The purpose of this method is to handle saving the todo form
-   *
-   * @param e - The form event
+   * Handles the submission of the todo form.
+   * @param {React.FormEvent<HTMLFormElement>} e - The form event.
    * @returns {Promise<void>}
    */
   const handleForm = async (
@@ -56,7 +57,7 @@ const TodoCreate = () => {
       });
       setTitle("");
     } catch (error: any) {
-      if (error.response.status === 400) {
+      if (error.response && error.response.status === 400) {
         toast({
           variant: "destructive",
           description: "You cannot create an empty todo",
@@ -67,8 +68,6 @@ const TodoCreate = () => {
       setButtonLoading(false);
     }
   };
-
-  /* ############################# RENDER ############################# */
 
   return (
     <>
@@ -92,6 +91,28 @@ const TodoCreate = () => {
           Save
         </Button>
       </form>
+    </>
+  );
+};
+
+/**
+ * Navigation component for the create todo page.
+ * @returns {JSX.Element} - The rendered component.
+ */
+const NavCreate = (): JSX.Element => {
+  return (
+    <>
+      <nav className="flex items-center justify-between px-10 py-5">
+        <div>
+          <Link href={"/dashboard"}>
+            {/* Corrected the usage of Link component */}
+            <Button variant={"ghost"}>
+              <ChevronLeft size={20} className="mr-2" />
+              Back
+            </Button>
+          </Link>
+        </div>
+      </nav>
     </>
   );
 };

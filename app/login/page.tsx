@@ -149,7 +149,7 @@ const LoginFooter = (): JSX.Element => {
 const NavLogin = (): JSX.Element => {
   return (
     <>
-      <nav className="flex items-center px-20 py-10">
+      <nav className="flex items-center px-20 py-5">
         <Link href={"/"}>
           <Button variant={"ghost"} className="text-md">
             <ChevronLeft size={20} className="mr-2" />
