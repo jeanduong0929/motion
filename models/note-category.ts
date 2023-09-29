@@ -1,5 +1,5 @@
 export default interface NoteCategory {
-  id: string;
+  _id: string;
   name: string;
   user: string;
 }

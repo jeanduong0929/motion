@@ -20,6 +20,7 @@ import instance from "@/lib/axios-config";
 
 // Icons and Graphics
 import { PlusIcon } from "lucide-react";
+import CategoryItem from "@/components/notes/category-item";
 
 const Notes = () => {
   // State Variables
@@ -41,8 +42,10 @@ const Notes = () => {
    * @returns {void}
    */
   React.useEffect(() => {
-    getNotes();
-  }, [session]);
+    if (session) {
+      getNotes();
+    }
+  }, [session, open, noteCategories]);
 
   /**
    * The purpose of this function is to get the notes from the database
@@ -87,12 +90,7 @@ const Notes = () => {
             <div className="w-full">
               {noteCategories &&
                 noteCategories.map((cat: NoteCategory) => (
-                  <div
-                    key={cat.id}
-                    className="flex items-center justify-between border px-5 py-4"
-                  >
-                    {cat.name}
-                  </div>
+                  <CategoryItem category={cat} />
                 ))}
             </div>
           </ScrollArea>

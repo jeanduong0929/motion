@@ -19,6 +19,7 @@ interface NoteCategoryDialogProps {
   setOpen: (open: boolean) => void;
   session: Session | null;
 }
+
 const NoteCategoryDialog = ({
   open,
   setOpen,
@@ -35,16 +36,21 @@ const NoteCategoryDialog = ({
     setNameError("");
   }, [open]);
 
-  const handleForm = async () => {
+  const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setSaveLoading(true);
 
     try {
+      // Make the API call to save the category
       await instance.post("/notes/category", {
         name,
         user: mySession!.id,
       });
+
+      // Close the dialog
       setOpen(false);
 
+      // Display success toaster
       toast({
         description: "Category created successfully",
         className: "bg-green-500",
@@ -65,33 +71,37 @@ const NoteCategoryDialog = ({
     <>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="mb-2">Create a category</DialogTitle>
-            <div className="flex flex-col items-start gap-2 w-full">
-              <Input
-                placeholder="Category name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              {nameError && (
-                <p className="text-small text-red-500">{nameError}</p>
-              )}
-            </div>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant={"secondary"}
-              type="button"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" onClick={handleForm} disabled={saveLoading}>
-              {saveLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              Save
-            </Button>
-          </DialogFooter>
+          <form className="flex flex-col gap-3" onSubmit={handleForm}>
+            <DialogHeader>
+              <DialogTitle className="mb-2">Create a category</DialogTitle>
+              <div className="flex flex-col items-start gap-2 w-full">
+                <Input
+                  placeholder="Category name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                {nameError && (
+                  <p className="text-small text-red-500">{nameError}</p>
+                )}
+              </div>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant={"secondary"}
+                type="button"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={saveLoading}>
+                {saveLoading && (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                )}
+                Save
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </>
