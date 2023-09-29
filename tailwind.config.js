@@ -19,21 +19,6 @@
         },
       },
       extend: {
-        typography: (theme) => ({
-          DEFAULT: {
-            css: {
-              h1: {
-                color: theme('colors.white'), // Customize color of h1 elements
-              },
-              h2: {
-                color: theme('colors.white'), // Customize color of h2 elements
-              },
-              h3: {
-                color: theme('colors.white'), // Customize color of h2 elements
-              },
-            },
-          },
-        }),
         colors: {
           border: "hsl(var(--border))",
           input: "hsl(var(--input))",
