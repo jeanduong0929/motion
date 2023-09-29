@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 
 // Custom UI Components
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 // Models and Data
@@ -16,7 +16,7 @@ import MySession from "@/models/session";
 import instance from "@/lib/axios-config";
 
 // Custom Components
-import Link from "next/link";
+import NavCreate from "@/components/nav/nav-create";
 
 /**
  * Component for creating a new Todo.
@@ -91,28 +91,6 @@ const TodoCreate = (): JSX.Element => {
           Save
         </Button>
       </form>
-    </>
-  );
-};
-
-/**
- * Navigation component for the create todo page.
- * @returns {JSX.Element} - The rendered component.
- */
-const NavCreate = (): JSX.Element => {
-  return (
-    <>
-      <nav className="flex items-center justify-between px-10 py-5">
-        <div>
-          <Link href={"/dashboard"}>
-            {/* Corrected the usage of Link component */}
-            <Button variant={"ghost"}>
-              <ChevronLeft size={20} className="mr-2" />
-              Back
-            </Button>
-          </Link>
-        </div>
-      </nav>
     </>
   );
 };
