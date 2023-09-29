@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Navbar from "@/components/nav/navbar";
+import Loading from "@/components/loading";
 
 const Home = () => {
   const cards = [
