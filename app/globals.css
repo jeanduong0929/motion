@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
 
 @layer base {
   :root {
@@ -87,10 +86,6 @@
   to {
     opacity: 1;
   }
-}
-
-.markdown-body {
-  @apply bg-transparent pl-5 pt-5 !important;
 }
 
 @media (max-width: 767px) {
