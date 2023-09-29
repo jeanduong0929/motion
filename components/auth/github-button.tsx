@@ -13,11 +13,12 @@ const GithubButton = ({ loading, setLoading }: GithubButtonProps) => {
     <>
       <Button
         className="w-full"
+        type="button"
         disabled={loading}
         onClick={() => {
           setLoading(true);
           signIn("github", {
-            callbackUrl: "https://motion-gray.vercel.app/dashboard",
+            callbackUrl: "http://localhost:3000/dashboard",
           });
         }}
       >

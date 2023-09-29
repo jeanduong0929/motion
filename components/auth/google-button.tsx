@@ -13,11 +13,12 @@ const GoogleButton = ({ loading, setLoading }: GoogleButtonProps) => {
     <>
       <Button
         className="w-full"
+        type="button"
         disabled={loading}
         onClick={() => {
           setLoading(true);
           signIn("google", {
-            callbackUrl: "https://motion-gray.vercel.app/dashboard",
+            callbackUrl: "http://localhost:3000/dashboard",
           });
         }}
       >

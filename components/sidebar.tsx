@@ -18,20 +18,13 @@ const Sidebar = () => {
     },
     {
       id: "2",
-      name: "Notes",
-      href: "/notes",
-      icon: <FileIcon size={24} />,
-      selected: pathname === "/notes",
-    },
-    {
-      id: "3",
       name: "Profile",
       href: "/profile",
       icon: <UserIcon size={24} />,
       selected: pathname === "/profile",
     },
     {
-      id: "4",
+      id: "3",
       name: "Settings",
       href: "/settings",
       icon: <SettingsIcon size={24} />,
